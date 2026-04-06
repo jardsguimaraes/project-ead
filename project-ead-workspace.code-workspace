@@ -1,0 +1,17 @@
+{
+	"folders": [
+		{
+			"path": "authuser"
+		},
+		{
+			"path": "course"
+		},
+		{
+			"path": "notification"
+		},
+		{
+			"path": "payment"
+		}
+	],
+	"settings": {}
+}
