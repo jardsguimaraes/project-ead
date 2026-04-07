@@ -4,6 +4,8 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
+import org.jspecify.annotations.Nullable;
+
 import com.ead.authuser.dtos.UserRecordDto;
 import com.ead.authuser.models.UserModel;
 
@@ -20,5 +22,12 @@ public interface UserServices {
     boolean existsByUserName(String username);
 
     boolean existsByEmail(String email);
+
+    UserModel updateUser(UserRecordDto userRecordDto, UserModel userModel);
+
+    UserModel updatePassword(UserRecordDto userRecordDto, UserModel userModel);
+
+    UserModel updateImage(UserRecordDto userRecordDto, UserModel userModel);
+
 
 }

@@ -70,4 +70,28 @@ public class UserServiceImpl implements UserServices {
         return userRepository.existsByEmail(email);
     }
 
+    @Override
+    public UserModel updateUser(UserRecordDto userRecordDto, UserModel userModel) {
+        userModel.setFullName(userRecordDto.fullName());
+        userModel.setPhoneNumber(userRecordDto.phoneNumber());
+        userModel.setLastUpdateDate(LocalDateTime.now(ZoneId.of("UTC")));
+        return userRepository.save(userModel);
+    }
+
+    @Override
+    public UserModel updatePassword(UserRecordDto userRecordDto, UserModel userModel) {
+        userModel.setPassword(userRecordDto.password());
+        userModel.setLastUpdateDate(LocalDateTime.now(ZoneId.of("UTC")));
+
+        return userRepository.save(userModel);
+    }
+
+    @Override
+    public UserModel updateImage(UserRecordDto userRecordDto, UserModel userModel) {
+        userModel.setImageUrl(userRecordDto.imageUrl());
+        userModel.setLastUpdateDate(LocalDateTime.now(ZoneId.of("UTC")));
+
+        return userRepository.save(userModel);
+    }
+
 }
