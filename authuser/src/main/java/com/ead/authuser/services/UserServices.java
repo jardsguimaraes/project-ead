@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
+import com.ead.authuser.dtos.UserRecordDto;
 import com.ead.authuser.models.UserModel;
 
 public interface UserServices {
@@ -13,5 +14,11 @@ public interface UserServices {
     Optional<UserModel> findById(UUID userId);
 
     void delete(UserModel userModel);
+
+    UserModel registerUser(UserRecordDto userRecordDto);
+
+    boolean existsByUserName(String username);
+
+    boolean existsByEmail(String email);
 
 }
