@@ -6,6 +6,7 @@ import java.util.UUID;
 
 import org.springframework.stereotype.Service;
 
+import com.ead.authuser.exceptions.NotFoundException;
 import com.ead.authuser.models.UserModel;
 import com.ead.authuser.repositories.UserRepository;
 import com.ead.authuser.services.UserServices;
@@ -26,7 +27,13 @@ public class UserServiceImpl implements UserServices {
 
     @Override
     public Optional<UserModel> findById(UUID userId) {
-        return userRepository.findById(userId);
+        Optional<UserModel> userModeOptional = userRepository.findById(userId);
+
+        if (userModeOptional.isEmpty()) {
+            throw new NotFoundException("Error User not found!");
+        }
+
+        return userModeOptional;
     }
 
     @Override
