@@ -6,6 +6,7 @@ import java.util.UUID;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -31,16 +32,19 @@ public class UserController {
 
     @GetMapping
     public ResponseEntity<List<UserModel>> getAllUsers() {
+
         return ResponseEntity.status(HttpStatus.OK).body(userService.findAll());
     }
 
     @GetMapping("/{userId}")
     public ResponseEntity<Object> getOneUser(@PathVariable(value = "userId") UUID userId) {
+
         return ResponseEntity.status(HttpStatus.OK).body(userService.findById(userId).get());
     }
 
     @DeleteMapping("/{userId}")
     public ResponseEntity<Object> deleteUser(@PathVariable(value = "userId") UUID userId) {
+
         userService.delete(userService.findById(userId).get());
         return ResponseEntity.status(HttpStatus.OK).body("User deleted successfully.");
     }
@@ -48,7 +52,8 @@ public class UserController {
     @PutMapping("/{userId}")
     public ResponseEntity<Object> updateUser(
             @PathVariable(value = "userId") UUID userId,
-            @RequestBody @JsonView(UserRecordDto.UserView.UserPut.class) UserRecordDto userRecordDto) {
+            @RequestBody @Validated(UserRecordDto.UserView.UserPut.class) 
+            @JsonView(UserRecordDto.UserView.UserPut.class) UserRecordDto userRecordDto) {
 
         return ResponseEntity.status(HttpStatus.OK)
                 .body(userService.updateUser(userRecordDto, userService.findById(userId).get()));
@@ -57,7 +62,8 @@ public class UserController {
     @PutMapping("/{userId}/password")
     public ResponseEntity<Object> updatePassword(
             @PathVariable(value = "userId") UUID userId,
-            @RequestBody @JsonView(UserRecordDto.UserView.PasswordPut.class) UserRecordDto userRecordDto) {
+            @RequestBody @Validated(UserRecordDto.UserView.PasswordPut.class) 
+            @JsonView(UserRecordDto.UserView.PasswordPut.class) UserRecordDto userRecordDto) {
 
         Optional<UserModel> userModelOptional = userService.findById(userId);
 
@@ -72,7 +78,8 @@ public class UserController {
     @PutMapping("/{userId}/image")
     public ResponseEntity<Object> updateImage(
             @PathVariable(value = "userId") UUID userId,
-            @RequestBody @JsonView(UserRecordDto.UserView.ImagePut.class) UserRecordDto userRecordDto) {
+            @RequestBody @Validated(UserRecordDto.UserView.ImagePut.class)
+            @JsonView(UserRecordDto.UserView.ImagePut.class) UserRecordDto userRecordDto) {
 
         return ResponseEntity.status(HttpStatus.OK)
                 .body(userService.updateImage(userRecordDto, userService.findById(userId).get()));
