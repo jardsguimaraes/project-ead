@@ -7,6 +7,8 @@ import java.util.Optional;
 import java.util.UUID;
 
 import org.springframework.beans.BeanUtils;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import com.ead.authuser.dtos.UserRecordDto;
@@ -92,6 +94,11 @@ public class UserServiceImpl implements UserServices {
         userModel.setLastUpdateDate(LocalDateTime.now(ZoneId.of("UTC")));
 
         return userRepository.save(userModel);
+    }
+
+    @Override
+    public Page<UserModel> findAll(Pageable pageable) {
+        return userRepository.findAll(pageable);
     }
 
 }

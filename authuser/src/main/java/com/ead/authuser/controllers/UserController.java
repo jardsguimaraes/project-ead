@@ -1,9 +1,12 @@
 package com.ead.authuser.controllers;
 
-import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -31,9 +34,8 @@ public class UserController {
     }
 
     @GetMapping
-    public ResponseEntity<List<UserModel>> getAllUsers() {
-
-        return ResponseEntity.status(HttpStatus.OK).body(userService.findAll());
+    public ResponseEntity<Page<UserModel>> getAllUsers(Pageable pageable) {
+        return ResponseEntity.status(HttpStatus.OK).body(userService.findAll(pageable));
     }
 
     @GetMapping("/{userId}")
@@ -52,8 +54,7 @@ public class UserController {
     @PutMapping("/{userId}")
     public ResponseEntity<Object> updateUser(
             @PathVariable(value = "userId") UUID userId,
-            @RequestBody @Validated(UserRecordDto.UserView.UserPut.class) 
-            @JsonView(UserRecordDto.UserView.UserPut.class) UserRecordDto userRecordDto) {
+            @RequestBody @Validated(UserRecordDto.UserView.UserPut.class) @JsonView(UserRecordDto.UserView.UserPut.class) UserRecordDto userRecordDto) {
 
         return ResponseEntity.status(HttpStatus.OK)
                 .body(userService.updateUser(userRecordDto, userService.findById(userId).get()));
@@ -62,8 +63,7 @@ public class UserController {
     @PutMapping("/{userId}/password")
     public ResponseEntity<Object> updatePassword(
             @PathVariable(value = "userId") UUID userId,
-            @RequestBody @Validated(UserRecordDto.UserView.PasswordPut.class) 
-            @JsonView(UserRecordDto.UserView.PasswordPut.class) UserRecordDto userRecordDto) {
+            @RequestBody @Validated(UserRecordDto.UserView.PasswordPut.class) @JsonView(UserRecordDto.UserView.PasswordPut.class) UserRecordDto userRecordDto) {
 
         Optional<UserModel> userModelOptional = userService.findById(userId);
 
@@ -78,8 +78,7 @@ public class UserController {
     @PutMapping("/{userId}/image")
     public ResponseEntity<Object> updateImage(
             @PathVariable(value = "userId") UUID userId,
-            @RequestBody @Validated(UserRecordDto.UserView.ImagePut.class)
-            @JsonView(UserRecordDto.UserView.ImagePut.class) UserRecordDto userRecordDto) {
+            @RequestBody @Validated(UserRecordDto.UserView.ImagePut.class) @JsonView(UserRecordDto.UserView.ImagePut.class) UserRecordDto userRecordDto) {
 
         return ResponseEntity.status(HttpStatus.OK)
                 .body(userService.updateImage(userRecordDto, userService.findById(userId).get()));
