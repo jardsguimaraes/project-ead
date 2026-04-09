@@ -21,6 +21,8 @@ import com.ead.authuser.models.UserModel;
 import com.ead.authuser.services.UserServices;
 import com.fasterxml.jackson.annotation.JsonView;
 
+import specifications.SpecificationTemplate;
+
 @RestController
 @RequestMapping("/users")
 public class UserController {
@@ -32,8 +34,8 @@ public class UserController {
     }
 
     @GetMapping
-    public ResponseEntity<Page<UserModel>> getAllUsers(Pageable pageable) {
-        return ResponseEntity.status(HttpStatus.OK).body(userService.findAll(pageable));
+    public ResponseEntity<Page<UserModel>> getAllUsers(SpecificationTemplate.UserSpec spec, Pageable pageable) {
+        return ResponseEntity.status(HttpStatus.OK).body(userService.findAll(spec, pageable));
     }
 
     @GetMapping("/{userId}")

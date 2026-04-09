@@ -6,6 +6,7 @@ import java.util.UUID;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 
 import com.ead.authuser.dtos.UserRecordDto;
 import com.ead.authuser.models.UserModel;
@@ -30,6 +31,6 @@ public interface UserServices {
 
     UserModel updateImage(UserRecordDto userRecordDto, UserModel userModel);
 
-    Page<UserModel> findAll(Pageable pageable);
+    Page<UserModel> findAll(Specification<UserModel> spec, Pageable pageable);
 
 }
