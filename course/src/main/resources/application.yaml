@@ -17,6 +17,7 @@ spring:
         properties:
             hibernate:
                 "[format_sql]": true # aspas simples resolvem o aviso
+                "[jdbc.lob.non_contextual_creation]": true
     jackson:
         serialization:
             "[INDENT_OUTPUT]": true
