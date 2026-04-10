@@ -1,5 +1,7 @@
 package com.ead.authuser.controllers;
 
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.*;
+
 import java.util.Optional;
 import java.util.UUID;
 
@@ -35,7 +37,13 @@ public class UserController {
 
     @GetMapping
     public ResponseEntity<Page<UserModel>> getAllUsers(SpecificationTemplate.UserSpec spec, Pageable pageable) {
-        return ResponseEntity.status(HttpStatus.OK).body(userService.findAll(spec, pageable));
+        var userPageModel = userService.findAll(spec, pageable);
+        if (!userPageModel.isEmpty()) {
+            for (UserModel user : userPageModel) {
+                user.add(linkTo(methodOn(UserController.class).getOneUser(user.getUserId())).withSelfRel());
+            }
+        }
+        return ResponseEntity.status(HttpStatus.OK).body(userPageModel);
     }
 
     @GetMapping("/{userId}")
