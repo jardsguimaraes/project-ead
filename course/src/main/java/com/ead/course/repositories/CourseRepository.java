@@ -7,5 +7,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import com.ead.course.models.CourseModel;
 
 public interface CourseRepository extends JpaRepository<CourseModel, UUID> {
+
+    boolean existsByName(String name);
     
 }

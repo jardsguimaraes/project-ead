@@ -1,7 +1,7 @@
 package com.ead.course.enums;
 
 public enum CourseLevel {
-    BRGINNER,
+    BEGINNER,
     INTERMEDIARY,
     ADVANCED;
 }
