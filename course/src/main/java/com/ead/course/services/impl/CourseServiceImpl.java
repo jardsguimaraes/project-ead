@@ -3,6 +3,8 @@ package com.ead.course.services.impl;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
 
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
@@ -63,5 +65,27 @@ public class CourseServiceImpl implements CourseService {
     @Override
     public boolean existsByName(String name) {
         return courseRepository.existsByName(name);
+    }
+
+    @Override
+    public List<CourseModel> findAll() {
+        return courseRepository.findAll();
+    }
+
+    @Override
+    public Optional<CourseModel> findById(UUID courseId) {
+        Optional<CourseModel> courseModeOptional = courseRepository.findById(courseId);
+        if (courseModeOptional.isEmpty()) {
+            //new throws
+        }
+
+        return courseModeOptional;
+    }
+
+    @Override
+    public CourseModel update(CourseRecordDto courseRecordDto, CourseModel courseModel) {
+        BeanUtils.copyProperties(courseRecordDto, courseModel);
+        courseModel.setLastUpdateDate(LocalDateTime.now(ZoneId.of("UTC")));
+        return courseRepository.save(courseModel);
     }
 }
