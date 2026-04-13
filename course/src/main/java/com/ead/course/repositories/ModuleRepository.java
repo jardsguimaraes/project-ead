@@ -1,6 +1,7 @@
 package com.ead.course.repositories;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 // import org.springframework.data.jpa.repository.EntityGraph;
@@ -18,17 +19,32 @@ public interface ModuleRepository extends JpaRepository<ModuleModel, UUID> {
     // ModuleModel findByTitle(String title);
 
     /*
-        Para uma consultas utilizar o @Query, caso seja necessário alterar ou deletar
-        utilizar o Modifying associado como @Query
-    */
-    // @Modifying
+     * Para uma consultas utilizar o @Query, caso seja necessário alterar ou deletar
+     * utilizar o @Modifying associado como @Query
+     * 
+     * @Modifying
+     * 
+     * @Query(value =
+     * "delete from tb_modules where course_course_id = :course_id""",
+     * nativeQuery = true)
+     */
     @Query(value = """
-                select
-                    *
-                from
-                    tb_modules
-                where
-                    course_course_id = :course_id""",
-            nativeQuery = true)
+            select
+                *
+            from
+                tb_modules
+            where
+                course_course_id = :course_id""", nativeQuery = true)
     List<ModuleModel> findAllModulesIntoCourse(@Param("course_id") UUID course_id);
+
+    @Query(value = """
+            select
+                *
+            from
+                tb_modules
+            where
+                course_course_id = :course_id and
+                module_id = :module_id
+            """, nativeQuery = true)
+    Optional<ModuleModel> findModuleIntoCourse(@Param("module_id") UUID module_id, @Param("course_id") UUID course_id);
 }

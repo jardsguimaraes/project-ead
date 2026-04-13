@@ -3,6 +3,8 @@ package com.ead.course.services.impl;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
 
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
@@ -50,4 +52,24 @@ public class ModuleServiceImpl implements ModuleService {
         return moduleRepository.save(moduleModel);
     }
 
+    @Override
+    public List<ModuleModel> findAllModuleIntoCourse(UUID courseId) {
+        return moduleRepository.findAllModulesIntoCourse(courseId);
+    }
+
+    @Override
+    public Optional<ModuleModel> findModuleIntoCourse(UUID moduleId, UUID courseId) {
+        var moduleModelOptional = moduleRepository.findModuleIntoCourse(moduleId, courseId);
+        if (moduleModelOptional.isEmpty()) {
+            // new throw
+        }
+
+        return moduleModelOptional;
+    }
+
+    @Override
+    public ModuleModel update(ModuleRecordDto moduleRecordDto, ModuleModel moduleModel) {
+        BeanUtils.copyProperties(moduleRecordDto, moduleModel);
+        return moduleRepository.save(moduleModel);
+    }
 }
