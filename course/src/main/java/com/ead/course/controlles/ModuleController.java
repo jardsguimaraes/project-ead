@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.ead.course.dots.ModuleRecordDto;
@@ -22,6 +23,7 @@ import com.ead.course.services.ModuleService;
 import jakarta.validation.Valid;
 
 @RestController
+@RequestMapping("/courses")
 public class ModuleController {
 
     final ModuleService moduleService;
@@ -33,26 +35,26 @@ public class ModuleController {
     }
 
     @Transactional
-    @PostMapping("/courses/{courseId}/modules")
+    @PostMapping("/{courseId}/modules")
     public ResponseEntity<Object> saveModule(@PathVariable(value = "courseId") UUID courseId,
             @RequestBody @Valid ModuleRecordDto moduleRecordDto) {
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(moduleService.save(moduleRecordDto, courseService.findById(courseId).get()));
     }
 
-    @GetMapping("/courses/{courseId}/modules")
+    @GetMapping("/{courseId}/modules")
     public ResponseEntity<List<ModuleModel>> getAllMdules(@PathVariable(value = "courseId") UUID courseId) {
         return ResponseEntity.status(HttpStatus.OK).body(moduleService.findAllModuleIntoCourse(courseId));
     }
 
-    @GetMapping("/courses/{courseId}/modules/{moduleId}")
+    @GetMapping("/{courseId}/modules/{moduleId}")
     public ResponseEntity<Object> getOneModule(@PathVariable(value = "courseId") UUID courseId,
             @PathVariable(value = "moduleId") UUID moduleId) {
         return ResponseEntity.status(HttpStatus.OK).body(moduleService.findModuleIntoCourse(moduleId, courseId));
     }
 
     @Transactional
-    @DeleteMapping("/courses/{courseId}/modules/{moduleId}")
+    @DeleteMapping("/{courseId}/modules/{moduleId}")
     public ResponseEntity<Object> deleteModule(@PathVariable(value = "courseId") UUID courseId,
             @PathVariable(value = "moduleId") UUID moduleId) {
         moduleService.delete(moduleService.findModuleIntoCourse(moduleId, courseId).get());
@@ -61,7 +63,7 @@ public class ModuleController {
     }
 
     @Transactional
-    @PutMapping("/courses/{courseId}/modules/{moduleId}")
+    @PutMapping("/{courseId}/modules/{moduleId}")
     public ResponseEntity<Object> updateModule(@PathVariable(value = "courseId") UUID courseId,
             @PathVariable(value = "moduleId") UUID moduleId, @RequestBody @Valid ModuleRecordDto moduleRecordDto) {
         return ResponseEntity.status(HttpStatus.OK).body(moduleService.update(moduleRecordDto,
