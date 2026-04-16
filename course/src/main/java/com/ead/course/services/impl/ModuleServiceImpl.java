@@ -3,7 +3,6 @@ package com.ead.course.services.impl;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.List;
-import java.util.Optional;
 import java.util.UUID;
 
 import org.springframework.beans.BeanUtils;
@@ -11,6 +10,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.ead.course.dots.ModuleRecordDto;
+import com.ead.course.exceptions.NotFoundException;
 import com.ead.course.models.CourseModel;
 import com.ead.course.models.LessonModel;
 import com.ead.course.models.ModuleModel;
@@ -58,13 +58,9 @@ public class ModuleServiceImpl implements ModuleService {
     }
 
     @Override
-    public Optional<ModuleModel> findModuleIntoCourse(UUID moduleId, UUID courseId) {
-        var moduleModelOptional = moduleRepository.findModuleIntoCourse(moduleId, courseId);
-        if (moduleModelOptional.isEmpty()) {
-            // new throw
-        }
-
-        return moduleModelOptional;
+    public ModuleModel findModuleIntoCourse(UUID moduleId, UUID courseId) {
+        return moduleRepository.findModuleIntoCourse(moduleId, courseId)
+                .orElseThrow(() -> new NotFoundException("Error: Module Not found!"));
     }
 
     @Override
@@ -74,13 +70,8 @@ public class ModuleServiceImpl implements ModuleService {
     }
 
     @Override
-    public Optional<ModuleModel> findById(UUID moduleId) {
-        var moduleModelOptional = moduleRepository.findById(moduleId);
-
-        if (moduleModelOptional.isEmpty()) {
-            // new throw
-        }
-
-        return moduleModelOptional;
+    public ModuleModel findById(UUID moduleId) {
+        return moduleRepository.findById(moduleId)
+                .orElseThrow(() -> new NotFoundException("Error: Module Not found!"));
     }
 }

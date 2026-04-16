@@ -39,7 +39,7 @@ public class LessonController {
     public ResponseEntity<Object> saveLesson(@PathVariable(value = "moduleId") UUID moduleId,
             @RequestBody @Valid LessonRecordDto lessonRecordDto) {
         return ResponseEntity.status(HttpStatus.CREATED)
-                .body(lessonService.save(lessonRecordDto, moduleService.findById(moduleId).get()));
+                .body(lessonService.save(lessonRecordDto, moduleService.findById(moduleId)));
     }
 
     @GetMapping("/{moduleId}/lessons")
@@ -50,14 +50,14 @@ public class LessonController {
     @GetMapping("/{moduleId}/lessons/{lessonId}")
     public ResponseEntity<Object> getOneLessons(@PathVariable(value = "moduleId") UUID moduleId,
             @PathVariable(value = "lessonId") UUID lessonId) {
-        return ResponseEntity.status(HttpStatus.OK).body(lessonService.findLessonIntoModule(moduleId, lessonId).get());
+        return ResponseEntity.status(HttpStatus.OK).body(lessonService.findLessonIntoModule(moduleId, lessonId));
     }
 
     @Transactional
     @DeleteMapping("/{moduleId}/lessons/{lessonId}")
     public ResponseEntity<Object> deleteLesson(@PathVariable(value = "moduleId") UUID moduleId,
             @PathVariable(value = "lessonId") UUID lessonId) {
-        lessonService.delete(lessonService.findLessonIntoModule(moduleId, lessonId).get());
+        lessonService.delete(lessonService.findLessonIntoModule(moduleId, lessonId));
         return ResponseEntity.status(HttpStatus.OK).body("Lesson deleted successfully.");
     }
 
@@ -66,6 +66,6 @@ public class LessonController {
     public ResponseEntity<Object> updateLesson(@PathVariable(value = "moduleId") UUID moduleId,
             @PathVariable(value = "lessonId") UUID lessonId, @RequestBody @Valid LessonRecordDto lessonRecordDto) {
         return ResponseEntity.status(HttpStatus.OK)
-                .body(lessonService.update(lessonRecordDto, lessonService.findLessonIntoModule(moduleId, lessonId).get()));
+                .body(lessonService.update(lessonRecordDto, lessonService.findLessonIntoModule(moduleId, lessonId)));
     }
 }

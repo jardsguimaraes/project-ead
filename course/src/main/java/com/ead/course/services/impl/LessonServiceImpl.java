@@ -3,13 +3,13 @@ package com.ead.course.services.impl;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.List;
-import java.util.Optional;
 import java.util.UUID;
 
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 
 import com.ead.course.dots.LessonRecordDto;
+import com.ead.course.exceptions.NotFoundException;
 import com.ead.course.models.LessonModel;
 import com.ead.course.models.ModuleModel;
 import com.ead.course.repositories.LessonRepository;
@@ -43,13 +43,9 @@ public class LessonServiceImpl implements LessonService {
     }
 
     @Override
-    public Optional<LessonModel> findLessonIntoModule(UUID moduleId, UUID lessonId) {
-        var lessonModelOptional = lessonRepository.findLessonIntoModule(moduleId, lessonId);
-        if (lessonModelOptional.isEmpty()) {
-            // new throw
-        }
-
-        return lessonModelOptional;
+    public LessonModel findLessonIntoModule(UUID moduleId, UUID lessonId) {
+        return lessonRepository.findLessonIntoModule(moduleId, lessonId)
+                .orElseThrow(() -> new NotFoundException("Error: Lesson Not found!"));
     }
 
     @Override

@@ -1,7 +1,6 @@
 package com.ead.course.services;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.UUID;
 
 import com.ead.course.dots.CourseRecordDto;
@@ -17,7 +16,7 @@ public interface CourseService {
 
     List<CourseModel> findAll();
 
-    Optional<CourseModel> findById(UUID courseId);
+    CourseModel findById(UUID courseId);
 
     CourseModel update(CourseRecordDto courseRecordDto, CourseModel courseModel);
 }

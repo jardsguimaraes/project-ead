@@ -3,7 +3,6 @@ package com.ead.course.services.impl;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.List;
-import java.util.Optional;
 import java.util.UUID;
 
 import org.springframework.beans.BeanUtils;
@@ -11,6 +10,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.ead.course.dots.CourseRecordDto;
+import com.ead.course.exceptions.NotFoundException;
 import com.ead.course.models.CourseModel;
 import com.ead.course.models.LessonModel;
 import com.ead.course.models.ModuleModel;
@@ -73,13 +73,9 @@ public class CourseServiceImpl implements CourseService {
     }
 
     @Override
-    public Optional<CourseModel> findById(UUID courseId) {
-        Optional<CourseModel> courseModeOptional = courseRepository.findById(courseId);
-        if (courseModeOptional.isEmpty()) {
-            //new throws
-        }
-
-        return courseModeOptional;
+    public CourseModel findById(UUID courseId) {
+        return courseRepository.findById(courseId)
+            .orElseThrow(() -> new NotFoundException("Error: Course Not found!"));
     }
 
     @Override
