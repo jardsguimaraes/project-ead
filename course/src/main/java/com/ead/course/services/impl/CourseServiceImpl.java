@@ -3,9 +3,13 @@ package com.ead.course.services.impl;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.List;
+import java.util.Objects;
 import java.util.UUID;
 
 import org.springframework.beans.BeanUtils;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -53,6 +57,7 @@ public class CourseServiceImpl implements CourseService {
 
     @Override
     public CourseModel save(CourseRecordDto courseRecordDto) {
+        Objects.requireNonNull(courseRecordDto, "courseRecordDto cannot be null");
         var courseModel = new CourseModel();
         BeanUtils.copyProperties(courseRecordDto, courseModel);
 
@@ -68,18 +73,22 @@ public class CourseServiceImpl implements CourseService {
     }
 
     @Override
-    public List<CourseModel> findAll() {
-        return courseRepository.findAll();
+    public Page<CourseModel> findAll(Specification<CourseModel> spec, Pageable pageable) {
+        Objects.requireNonNull(pageable, "pageable cannot be null");
+        return courseRepository.findAll(spec, pageable);
     }
 
     @Override
     public CourseModel findById(UUID courseId) {
+        Objects.requireNonNull(courseId, "courseId cannot be null");
         return courseRepository.findById(courseId)
-            .orElseThrow(() -> new NotFoundException("Error: Course Not found!"));
+                .orElseThrow(() -> new NotFoundException("Error: Course Not found!"));
     }
 
     @Override
     public CourseModel update(CourseRecordDto courseRecordDto, CourseModel courseModel) {
+        Objects.requireNonNull(courseRecordDto, "courseRecordDto cannot be null");
+        Objects.requireNonNull(courseModel, "courseModel cannot be null");
         BeanUtils.copyProperties(courseRecordDto, courseModel);
         courseModel.setLastUpdateDate(LocalDateTime.now(ZoneId.of("UTC")));
         return courseRepository.save(courseModel);

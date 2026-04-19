@@ -2,10 +2,13 @@ package com.ead.course.services.impl;
 
 import java.time.LocalDateTime;
 import java.time.ZoneId;
-import java.util.List;
+import java.util.Objects;
 import java.util.UUID;
 
 import org.springframework.beans.BeanUtils;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import com.ead.course.dots.LessonRecordDto;
@@ -28,6 +31,8 @@ public class LessonServiceImpl implements LessonService {
 
     @Override
     public LessonModel save(LessonRecordDto lessonRecordDto, ModuleModel moduleModel) {
+        Objects.requireNonNull(lessonRecordDto, "lessonRecordDto cannot be null");
+        Objects.requireNonNull(moduleModel, "moduleModel cannot be null");
         var lessonModel = new LessonModel();
         BeanUtils.copyProperties(lessonRecordDto, lessonModel);
 
@@ -38,11 +43,6 @@ public class LessonServiceImpl implements LessonService {
     }
 
     @Override
-    public List<LessonModel> findAllLessonsIntoModule(UUID moduleId) {
-        return lessonRepository.findAllLessonsIntoModule(moduleId);
-    }
-
-    @Override
     public LessonModel findLessonIntoModule(UUID moduleId, UUID lessonId) {
         return lessonRepository.findLessonIntoModule(moduleId, lessonId)
                 .orElseThrow(() -> new NotFoundException("Error: Lesson Not found!"));
@@ -50,12 +50,21 @@ public class LessonServiceImpl implements LessonService {
 
     @Override
     public void delete(LessonModel lessonIntoCourse) {
+        Objects.requireNonNull(lessonIntoCourse, "lessonIntoCourse cannot be null");
         lessonRepository.delete(lessonIntoCourse);
     }
 
     @Override
     public LessonModel update(LessonRecordDto lessonRecordDto, LessonModel lessonModel) {
+        Objects.requireNonNull(lessonRecordDto, "lessonRecordDto cannot be null");
+        Objects.requireNonNull(lessonModel, "lessonModel cannot be null");
         BeanUtils.copyProperties(lessonRecordDto, lessonModel);
         return lessonRepository.save(lessonModel);
+    }
+
+    @Override
+    public Page<LessonModel> findAllLessonsIntoModule(Specification<LessonModel> spec, Pageable pageable) {
+        Objects.requireNonNull(pageable, "Error: pageable Not found!");
+        return lessonRepository.findAll(spec, pageable);
     }
 }

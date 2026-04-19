@@ -29,6 +29,7 @@
 	</scm>
 	<properties>
 		<java.version>21</java.version>
+		<specification.version>3.1.0</specification.version>
 	</properties>
 	<dependencies>
 		<dependency>
@@ -56,6 +57,12 @@
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-validation</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>net.kaczmarzyk</groupId>
+			<artifactId>specification-arg-resolver</artifactId>
+			<version>${specification.version}</version>
 		</dependency>
 
 		<dependency>

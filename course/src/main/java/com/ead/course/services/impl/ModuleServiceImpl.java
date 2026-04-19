@@ -3,9 +3,13 @@ package com.ead.course.services.impl;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.List;
+import java.util.Objects;
 import java.util.UUID;
 
 import org.springframework.beans.BeanUtils;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -43,6 +47,7 @@ public class ModuleServiceImpl implements ModuleService {
 
     @Override
     public ModuleModel save(ModuleRecordDto moduleRecordDto, CourseModel courseModel) {
+        Objects.requireNonNull(moduleRecordDto, "moduleRecordDto cannot be null");
         var moduleModel = new ModuleModel();
         BeanUtils.copyProperties(moduleRecordDto, moduleModel);
 
@@ -65,13 +70,22 @@ public class ModuleServiceImpl implements ModuleService {
 
     @Override
     public ModuleModel update(ModuleRecordDto moduleRecordDto, ModuleModel moduleModel) {
+        Objects.requireNonNull(moduleRecordDto, "moduleRecordDto cannot be null");
+        Objects.requireNonNull(moduleModel, "moduleModel cannot be null");
         BeanUtils.copyProperties(moduleRecordDto, moduleModel);
         return moduleRepository.save(moduleModel);
     }
 
     @Override
     public ModuleModel findById(UUID moduleId) {
+        Objects.requireNonNull(moduleId, "moduleId cannot be null");
         return moduleRepository.findById(moduleId)
                 .orElseThrow(() -> new NotFoundException("Error: Module Not found!"));
+    }
+
+    @Override
+    public Page<ModuleModel> findAllModulesIntoCourse(Specification<ModuleModel> spec, Pageable pageable) {
+        Objects.requireNonNull(pageable, "Error pageable cannot be null");
+        return moduleRepository.findAll(spec, pageable);
     }
 }
