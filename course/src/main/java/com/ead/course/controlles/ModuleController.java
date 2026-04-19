@@ -1,5 +1,7 @@
 package com.ead.course.controlles;
 
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.*;
+
 import java.util.UUID;
 
 import org.springframework.data.domain.Page;
@@ -44,15 +46,24 @@ public class ModuleController {
                 .body(moduleService.save(moduleRecordDto, courseService.findById(courseId)));
     }
 
+    @SuppressWarnings("null")
     @GetMapping("/{courseId}/modules")
-    public ResponseEntity<Page<ModuleModel>> getAllMdules(@PathVariable(value = "courseId") UUID courseId,
+    public ResponseEntity<Page<ModuleModel>> getAllModules(@PathVariable(value = "courseId") UUID courseId,
             SpecificationTemplate.ModuleSpec spec, Pageable pageable) {
-        return ResponseEntity.status(HttpStatus.OK).body(moduleService
-                .findAllModulesIntoCourse(SpecificationTemplate.moduleCourseId(courseId).and(spec), pageable));
+        var modulePageModel = moduleService
+                .findAllModulesIntoCourse(SpecificationTemplate.moduleCourseId(courseId).and(spec), pageable);
+
+        if (!modulePageModel.isEmpty()) {
+            for (ModuleModel model : modulePageModel) {
+                model.add(linkTo(methodOn(ModuleController.class).getOneModule(courseId, model.getModuleId()))
+                        .withSelfRel());
+            }
+        }
+        return ResponseEntity.status(HttpStatus.OK).body(modulePageModel);
     }
 
     @GetMapping("/{courseId}/modules/{moduleId}")
-    public ResponseEntity<Object> getOneModule(@PathVariable(value = "courseId") UUID courseId,
+    public ResponseEntity<ModuleModel> getOneModule(@PathVariable(value = "courseId") UUID courseId,
             @PathVariable(value = "moduleId") UUID moduleId) {
         return ResponseEntity.status(HttpStatus.OK).body(moduleService.findModuleIntoCourse(moduleId, courseId));
     }

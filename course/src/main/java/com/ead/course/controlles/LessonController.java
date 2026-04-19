@@ -1,5 +1,7 @@
 package com.ead.course.controlles;
 
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.*;
+
 import java.util.UUID;
 
 import org.springframework.data.domain.Page;
@@ -44,11 +46,19 @@ public class LessonController {
                 .body(lessonService.save(lessonRecordDto, moduleService.findById(moduleId)));
     }
 
+    @SuppressWarnings("null")
     @GetMapping("/{moduleId}/lessons")
     public ResponseEntity<Page<LessonModel>> getAllLessons(@PathVariable(value = "moduleId") UUID moduleId,
             SpecificationTemplate.LessonSpec spec, Pageable pageable) {
-        return ResponseEntity.status(HttpStatus.OK).body(lessonService
-                .findAllLessonsIntoModule(SpecificationTemplate.lessonModuleId(moduleId).and(spec), pageable));
+                var lessonPageModel = lessonService
+                .findAllLessonsIntoModule(SpecificationTemplate.lessonModuleId(moduleId).and(spec), pageable);
+
+                if (!lessonPageModel.isEmpty()) {
+                    for (LessonModel lesson : lessonPageModel) {
+                        lesson.add(linkTo(methodOn(LessonController.class).getOneLessons(moduleId, lesson.getLessonId())).withSelfRel());
+                    }
+                }
+        return ResponseEntity.status(HttpStatus.OK).body(lessonPageModel);
     }
 
     @GetMapping("/{moduleId}/lessons/{lessonId}")
