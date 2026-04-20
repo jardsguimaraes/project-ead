@@ -20,3 +20,14 @@ spring:
     jackson:
         serialization:
             "[INDENT_OUTPUT]": true
+
+    # output:   --Configuração para colorir os logs no console no Windows
+    #     ansi:
+    #         enabled: ALWAYS
+
+logging:
+    level:
+        root: INFO
+        "[com.ead.authuser]": TRACE
+        "[org.springframework.web]": DEBUG
+        "[org.hibernate]": INFO
