@@ -25,7 +25,9 @@ import com.ead.course.services.CourseService;
 import com.ead.course.services.ModuleService;
 
 import jakarta.validation.Valid;
+import lombok.extern.log4j.Log4j2;
 
+@Log4j2
 @RestController
 @RequestMapping("/courses")
 public class ModuleController {
@@ -42,10 +44,12 @@ public class ModuleController {
     @PostMapping("/{courseId}/modules")
     public ResponseEntity<Object> saveModule(@PathVariable(value = "courseId") UUID courseId,
             @RequestBody @Valid ModuleRecordDto moduleRecordDto) {
+        log.debug("POST saveCourse courseRecordDto received {} ", moduleRecordDto);
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(moduleService.save(moduleRecordDto, courseService.findById(courseId)));
     }
 
+    @SuppressWarnings("null")
     @GetMapping("/{courseId}/modules")
     public ResponseEntity<Page<ModuleModel>> getAllModules(@PathVariable(value = "courseId") UUID courseId,
             SpecificationTemplate.ModuleSpec spec, Pageable pageable) {
@@ -71,6 +75,7 @@ public class ModuleController {
     @DeleteMapping("/{courseId}/modules/{moduleId}")
     public ResponseEntity<Object> deleteModule(@PathVariable(value = "courseId") UUID courseId,
             @PathVariable(value = "moduleId") UUID moduleId) {
+        log.debug("DELETE deleteCourse courseId received {} ", moduleId);
         moduleService.delete(moduleService.findModuleIntoCourse(moduleId, courseId));
         return ResponseEntity.status(HttpStatus.OK)
                 .body("Module deleted successfully.");
@@ -80,6 +85,7 @@ public class ModuleController {
     @PutMapping("/{courseId}/modules/{moduleId}")
     public ResponseEntity<Object> updateModule(@PathVariable(value = "courseId") UUID courseId,
             @PathVariable(value = "moduleId") UUID moduleId, @RequestBody @Valid ModuleRecordDto moduleRecordDto) {
+        log.debug("PUT updateCourse courseRecordDto received {}", moduleRecordDto);
         return ResponseEntity.status(HttpStatus.OK).body(moduleService.update(moduleRecordDto,
                 moduleService.findModuleIntoCourse(moduleId, courseId)));
     }
