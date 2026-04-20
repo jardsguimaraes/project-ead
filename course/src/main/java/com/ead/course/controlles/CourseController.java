@@ -24,7 +24,9 @@ import com.ead.course.models.CourseModel;
 import com.ead.course.services.CourseService;
 
 import jakarta.validation.Valid;
+import lombok.extern.log4j.Log4j2;
 
+@Log4j2
 @RestController
 @RequestMapping("/courses")
 public class CourseController {
@@ -38,9 +40,14 @@ public class CourseController {
     @Transactional
     @PostMapping
     public ResponseEntity<Object> saveCourse(@RequestBody @Valid CourseRecordDto courseRecordDto) {
+        log.debug("POST saveCourse courseRecordDto received {} ", courseRecordDto);
+
         if (courseService.existsByName(courseRecordDto.name())) {
+            log.warn("Course name {} is already taken", courseRecordDto.name());
             return ResponseEntity.status(HttpStatus.CONFLICT).body("Error: Course Name is Already Taken!");
         }
+
+        log.debug("Course saved successfully {} ", courseRecordDto);
         return ResponseEntity.status(HttpStatus.CREATED).body(courseService.save(courseRecordDto));
     }
 
@@ -64,7 +71,9 @@ public class CourseController {
     @Transactional
     @DeleteMapping("/{courseId}")
     public ResponseEntity<Object> deleteCourse(@PathVariable(value = "courseId") UUID courseId) {
+        log.debug("DELETE deleteCourse courseId received {} ", courseId);
         courseService.delete(courseService.findById(courseId));
+
         return ResponseEntity.status(HttpStatus.OK).body("Course deleted successfully.");
     }
 
@@ -72,6 +81,8 @@ public class CourseController {
     @PutMapping("/{courseId}")
     public ResponseEntity<Object> updateCourse(@PathVariable(value = "courseId") UUID courseId,
             @RequestBody @Valid CourseRecordDto courseRecordDto) {
+        log.debug("PUT updateCourse courseRecordDto received {}", courseRecordDto);
+
         return ResponseEntity.status(HttpStatus.OK)
                 .body(courseService.update(courseRecordDto, courseService.findById(courseId)));
     }

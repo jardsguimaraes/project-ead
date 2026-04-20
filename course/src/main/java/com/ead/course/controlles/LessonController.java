@@ -25,7 +25,9 @@ import com.ead.course.services.LessonService;
 import com.ead.course.services.ModuleService;
 
 import jakarta.validation.Valid;
+import lombok.extern.log4j.Log4j2;
 
+@Log4j2
 @RestController
 @RequestMapping("/modules")
 public class LessonController {
@@ -42,6 +44,7 @@ public class LessonController {
     @PostMapping("/{moduleId}/lessons")
     public ResponseEntity<Object> saveLesson(@PathVariable(value = "moduleId") UUID moduleId,
             @RequestBody @Valid LessonRecordDto lessonRecordDto) {
+        log.debug("POST saveCourse courseRecordDto received {} ", lessonRecordDto);
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(lessonService.save(lessonRecordDto, moduleService.findById(moduleId)));
     }
@@ -49,14 +52,15 @@ public class LessonController {
     @GetMapping("/{moduleId}/lessons")
     public ResponseEntity<Page<LessonModel>> getAllLessons(@PathVariable(value = "moduleId") UUID moduleId,
             SpecificationTemplate.LessonSpec spec, Pageable pageable) {
-                var lessonPageModel = lessonService
+        var lessonPageModel = lessonService
                 .findAllLessonsIntoModule(SpecificationTemplate.lessonModuleId(moduleId).and(spec), pageable);
 
-                if (!lessonPageModel.isEmpty()) {
-                    for (LessonModel lesson : lessonPageModel) {
-                        lesson.add(linkTo(methodOn(LessonController.class).getOneLessons(moduleId, lesson.getLessonId())).withSelfRel());
-                    }
-                }
+        if (!lessonPageModel.isEmpty()) {
+            for (LessonModel lesson : lessonPageModel) {
+                lesson.add(linkTo(methodOn(LessonController.class).getOneLessons(moduleId, lesson.getLessonId()))
+                        .withSelfRel());
+            }
+        }
         return ResponseEntity.status(HttpStatus.OK).body(lessonPageModel);
     }
 
@@ -70,6 +74,7 @@ public class LessonController {
     @DeleteMapping("/{moduleId}/lessons/{lessonId}")
     public ResponseEntity<Object> deleteLesson(@PathVariable(value = "moduleId") UUID moduleId,
             @PathVariable(value = "lessonId") UUID lessonId) {
+        log.debug("DELETE deleteCourse courseId received {} ", lessonId);
         lessonService.delete(lessonService.findLessonIntoModule(moduleId, lessonId));
         return ResponseEntity.status(HttpStatus.OK).body("Lesson deleted successfully.");
     }
@@ -78,6 +83,7 @@ public class LessonController {
     @PutMapping("/{moduleId}/lessons/{lessonId}")
     public ResponseEntity<Object> updateLesson(@PathVariable(value = "moduleId") UUID moduleId,
             @PathVariable(value = "lessonId") UUID lessonId, @RequestBody @Valid LessonRecordDto lessonRecordDto) {
+        log.debug("PUT updateCourse courseRecordDto received {}", lessonRecordDto);
         return ResponseEntity.status(HttpStatus.OK)
                 .body(lessonService.update(lessonRecordDto, lessonService.findLessonIntoModule(moduleId, lessonId)));
     }
