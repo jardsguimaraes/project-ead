@@ -103,7 +103,6 @@ public class UserServiceImpl implements UserServices {
 
     @Override
     public Page<UserModel> findAll(Specification<UserModel> spec, Pageable pageable) {
-        Objects.requireNonNull(spec, "Specification cannot be null");
         Objects.requireNonNull(pageable, "Pageable cannot be null");
         return userRepository.findAll(spec, pageable);
     }
