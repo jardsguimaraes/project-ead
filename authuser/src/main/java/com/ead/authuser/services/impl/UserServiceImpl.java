@@ -3,6 +3,7 @@ package com.ead.authuser.services.impl;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -36,6 +37,7 @@ public class UserServiceImpl implements UserServices {
 
     @Override
     public Optional<UserModel> findById(UUID userId) {
+        Objects.requireNonNull(userId, "User ID cannot be null");
         Optional<UserModel> userModeOptional = userRepository.findById(userId);
 
         if (userModeOptional.isEmpty()) {
@@ -47,11 +49,13 @@ public class UserServiceImpl implements UserServices {
 
     @Override
     public void delete(UserModel userModel) {
+        Objects.requireNonNull(userModel, "User model cannot be null");
         userRepository.delete(userModel);
     }
 
     @Override
     public UserModel registerUser(UserRecordDto userRecordDto) {
+        Objects.requireNonNull(userRecordDto, "User record DTO cannot be null");
         var userModel = new UserModel();
         BeanUtils.copyProperties(userRecordDto, userModel);
 
@@ -99,6 +103,8 @@ public class UserServiceImpl implements UserServices {
 
     @Override
     public Page<UserModel> findAll(Specification<UserModel> spec, Pageable pageable) {
+        Objects.requireNonNull(spec, "Specification cannot be null");
+        Objects.requireNonNull(pageable, "Pageable cannot be null");
         return userRepository.findAll(spec, pageable);
     }
 
