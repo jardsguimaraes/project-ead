@@ -35,6 +35,7 @@ public class UserController {
         this.userService = userService;
     }
 
+    @SuppressWarnings("null")
     @GetMapping
     public ResponseEntity<Page<UserModel>> getAllUsers(SpecificationTemplate.UserSpec spec, Pageable pageable) {
         var userPageModel = userService.findAll(spec, pageable);
@@ -48,7 +49,6 @@ public class UserController {
 
     @GetMapping("/{userId}")
     public ResponseEntity<Object> getOneUser(@PathVariable(value = "userId") UUID userId) {
-
         return ResponseEntity.status(HttpStatus.OK).body(userService.findById(userId).get());
     }
 

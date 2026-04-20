@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.web.PageableHandlerMethodArgumentResolver;
+import org.springframework.lang.NonNull;
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
@@ -15,7 +16,7 @@ import net.kaczmarzyk.spring.data.jpa.web.SpecificationArgumentResolver;
 public class ResolverConfig implements WebMvcConfigurer {
 
     @Override
-    public void addArgumentResolvers(List<HandlerMethodArgumentResolver> argumentResolvers) {
+    public void addArgumentResolvers(@NonNull List<HandlerMethodArgumentResolver> argumentResolvers) {
         argumentResolvers.add(new SpecificationArgumentResolver());
 
         var pageableResolver = new PageableHandlerMethodArgumentResolver();
@@ -24,7 +25,7 @@ public class ResolverConfig implements WebMvcConfigurer {
     }
 
     @Override
-    public void addCorsMappings(CorsRegistry registry) {
+    public void addCorsMappings(@NonNull CorsRegistry registry) {
         // registry.addMapping("/users/**").allowedOrigins("http://example.com");
         // registry.addMapping("/auth/**").allowedOrigins("http://abc.com");
         registry.addMapping("/**").maxAge(3600);
