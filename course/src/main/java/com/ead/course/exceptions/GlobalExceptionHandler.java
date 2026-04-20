@@ -11,6 +11,8 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
+import com.fasterxml.jackson.databind.JsonMappingException;
+import com.fasterxml.jackson.databind.JsonMappingException.Reference;
 import com.fasterxml.jackson.databind.exc.InvalidFormatException;
 
 @ControllerAdvice
@@ -42,13 +44,16 @@ public class GlobalExceptionHandler {
 
         if (ex.getCause() instanceof InvalidFormatException ifx) {
             if (ifx.getTargetType() != null && ifx.getTargetType().isEnum()) {
-                String fieldName = ifx.getPath().get(ifx.getPath().size() - 1).getFieldName();
+                Reference reference = (JsonMappingException.Reference) ifx.getPath()
+                        .get(ifx.getPath().size() - 1);
+                String fieldName = reference.getFieldName();
                 String errorMessage = ifx.getMessage();
                 erros.put(fieldName, errorMessage);
             }
         }
 
-        ErrorResponse errorResponse = new ErrorResponse(HttpStatus.BAD_REQUEST.value(), "Error Invalid Enum value", erros);
+        ErrorResponse errorResponse = new ErrorResponse(HttpStatus.BAD_REQUEST.value(), "Error Invalid Enum value",
+                erros);
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponse);
     }
 }

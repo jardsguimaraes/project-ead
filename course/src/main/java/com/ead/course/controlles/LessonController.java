@@ -46,7 +46,6 @@ public class LessonController {
                 .body(lessonService.save(lessonRecordDto, moduleService.findById(moduleId)));
     }
 
-    @SuppressWarnings("null")
     @GetMapping("/{moduleId}/lessons")
     public ResponseEntity<Page<LessonModel>> getAllLessons(@PathVariable(value = "moduleId") UUID moduleId,
             SpecificationTemplate.LessonSpec spec, Pageable pageable) {

@@ -18,8 +18,6 @@ import com.ead.course.models.ModuleModel;
 import com.ead.course.repositories.LessonRepository;
 import com.ead.course.services.LessonService;
 
-import lombok.var;
-
 @Service
 public class LessonServiceImpl implements LessonService {
 

@@ -46,7 +46,6 @@ public class ModuleController {
                 .body(moduleService.save(moduleRecordDto, courseService.findById(courseId)));
     }
 
-    @SuppressWarnings("null")
     @GetMapping("/{courseId}/modules")
     public ResponseEntity<Page<ModuleModel>> getAllModules(@PathVariable(value = "courseId") UUID courseId,
             SpecificationTemplate.ModuleSpec spec, Pageable pageable) {
