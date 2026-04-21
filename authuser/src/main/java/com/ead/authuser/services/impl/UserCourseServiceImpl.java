@@ -6,11 +6,11 @@ import com.ead.authuser.repositories.UserCourseRepository;
 import com.ead.authuser.services.UserCourseService;
 
 @Service
-public class UserCourseImpl implements UserCourseService{
+public class UserCourseServiceImpl implements UserCourseService{
 
     final UserCourseRepository UsercourseRepository;
 
-    public UserCourseImpl(UserCourseRepository usercourseRepository) {
+    public UserCourseServiceImpl(UserCourseRepository usercourseRepository) {
         UsercourseRepository = usercourseRepository;
     }
 }
