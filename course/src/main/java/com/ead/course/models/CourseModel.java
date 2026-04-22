@@ -55,13 +55,13 @@ public class CourseModel extends RepresentationModel<CourseModel> implements Ser
     // @JsonFormat(shape = JsonFormat.Shape.STRING, pattern =
     // "yyyy-MM-dd'T'HH:mm:ss'Z")
     @Column(nullable = false)
-    // 
+    //
     private LocalDateTime creationDate;
 
     // @JsonFormat(shape = JsonFormat.Shape.STRING, pattern =
     // "yyyy-MM-dd'T'HH:mm:ss'Z")
     @Column(nullable = false)
-    // 
+    //
     private LocalDateTime lastUpdateDate;
 
     @Column(nullable = false)
@@ -87,6 +87,6 @@ public class CourseModel extends RepresentationModel<CourseModel> implements Ser
 
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     @OneToMany(mappedBy = "course", fetch = FetchType.LAZY)
-    // @JoinColumn(name = "course_id")  Caso queira personalizar o nome da FK
+    // @JoinColumn(name = "course_id") Caso queira personalizar o nome da FK
     private Set<CourseUserModel> coursesUsers;
 }

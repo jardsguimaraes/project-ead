@@ -8,7 +8,7 @@ import com.ead.course.services.CourseUserService;
 @Service
 public class CourseUserServiceImpl implements CourseUserService {
 
-    private CourseUserRepository courseUserRepository;
+    final CourseUserRepository courseUserRepository;
 
     public CourseUserServiceImpl(CourseUserRepository courseUserRepository) {
         this.courseUserRepository = courseUserRepository;
