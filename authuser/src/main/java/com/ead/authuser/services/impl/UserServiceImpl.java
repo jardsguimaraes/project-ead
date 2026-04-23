@@ -16,7 +16,7 @@ import org.springframework.stereotype.Service;
 import com.ead.authuser.dtos.UserRecordDto;
 import com.ead.authuser.enums.UserStatus;
 import com.ead.authuser.enums.UserType;
-import com.ead.authuser.exceptions.NotFoundException;
+import com.ead.authuser.exceptions.ExternalNotFoundException;
 import com.ead.authuser.models.UserModel;
 import com.ead.authuser.repositories.UserRepository;
 import com.ead.authuser.services.UserServices;
@@ -41,7 +41,7 @@ public class UserServiceImpl implements UserServices {
         Optional<UserModel> userModeOptional = userRepository.findById(userId);
 
         if (userModeOptional.isEmpty()) {
-            throw new NotFoundException("Error User not found!");
+            throw new ExternalNotFoundException("Error User not found!");
         }
 
         return userModeOptional;

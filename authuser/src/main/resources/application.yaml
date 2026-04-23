@@ -20,10 +20,14 @@ spring:
     jackson:
         serialization:
             "[INDENT_OUTPUT]": true
-
     # output:   --Configuração para colorir os logs no console no Windows
     #     ansi:
     #         enabled: ALWAYS
+
+ead:
+    api:
+        url:
+            course: "http://localhost:8082/ead-course"
 
 logging:
     level:

@@ -2,6 +2,7 @@ package com.ead.authuser.exceptions;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -16,8 +17,8 @@ import lombok.extern.log4j.Log4j2;
 @ControllerAdvice
 public class GlobalExceptionHandler {
 
-    @ExceptionHandler(NotFoundException.class)
-    public ResponseEntity<ErrorResponse> handleNotFoundException(NotFoundException ex) {
+    @ExceptionHandler(ExternalNotFoundException.class)
+    public ResponseEntity<ErrorResponse> handleNotFoundException(ExternalNotFoundException ex) {
         var errorResponse = new ErrorResponse(HttpStatus.NOT_FOUND.value(), ex.getMessage(), null);
         log.error("NotFoundException message: {}", ex.getMessage());
 
@@ -38,5 +39,14 @@ public class GlobalExceptionHandler {
         log.error("MethodArgumentNotValidException message: {}", ex.getMessage());
 
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponse);
+    }
+
+    @ExceptionHandler(ExternalRestClientException.class)
+    public ResponseEntity<ErrorResponse> hanlderRestClientException(ExternalRestClientException ex) {
+        var statusCode = Objects.requireNonNull(ex.getHttpStatusCode(), "HttpStatusCode cannot be null");
+        var erroResponse = new ErrorResponse(ex.getHttpStatusCode().value(), ex.getMessage(), null);
+        log.error("Error calling microservice {}: {}", ex.getMicroservice(), ex.getMessage(), ex);
+
+        return ResponseEntity.status(statusCode).body(erroResponse);
     }
 }
