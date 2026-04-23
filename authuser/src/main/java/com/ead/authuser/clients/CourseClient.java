@@ -37,7 +37,7 @@ public class CourseClient {
         var url = baseUrlCourse + "/courses?userId=" + userId +
                 "&page=" + pageable.getPageNumber() +
                 "&size=" + pageable.getPageSize() +
-                "&sort=" + pageable.getSort().toString().replaceAll(":", ",");
+                "&sort=" + pageable.getSort().toString().replaceAll(": ", ",");
 
         try {
             var responsePageDto = restClient.get()
@@ -45,7 +45,7 @@ public class CourseClient {
                     .retrieve()
                     .body(new ParameterizedTypeReference<ResponsePageDto<CourseRecordDto>>() {});
 
-            log.debug("Successful microservice Course response: {}", pageable);
+            log.debug("Successful microservice Course response: {}", responsePageDto);
             return responsePageDto;
         } catch (HttpClientErrorException | HttpServerErrorException e) {
             log.error("Erro ao comunicar com o serviço de cursos: ", e.getMessage());
