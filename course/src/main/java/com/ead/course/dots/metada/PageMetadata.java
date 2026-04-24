@@ -1,4 +1,4 @@
-package com.ead.course.metada;
+package com.ead.course.dots.metada;
 
 public record PageMetadata(
         int size,
