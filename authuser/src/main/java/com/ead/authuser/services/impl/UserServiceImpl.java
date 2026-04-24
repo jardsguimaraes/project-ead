@@ -4,7 +4,6 @@ import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.List;
 import java.util.Objects;
-import java.util.Optional;
 import java.util.UUID;
 
 import org.springframework.beans.BeanUtils;
@@ -19,10 +18,10 @@ import com.ead.authuser.enums.UserType;
 import com.ead.authuser.exceptions.ExternalNotFoundException;
 import com.ead.authuser.models.UserModel;
 import com.ead.authuser.repositories.UserRepository;
-import com.ead.authuser.services.UserServices;
+import com.ead.authuser.services.UserService;
 
 @Service
-public class UserServiceImpl implements UserServices {
+public class UserServiceImpl implements UserService {
 
     final UserRepository userRepository;
 
@@ -36,15 +35,11 @@ public class UserServiceImpl implements UserServices {
     }
 
     @Override
-    public Optional<UserModel> findById(UUID userId) {
+    public UserModel findById(UUID userId) {
         Objects.requireNonNull(userId, "User ID cannot be null");
-        Optional<UserModel> userModeOptional = userRepository.findById(userId);
 
-        if (userModeOptional.isEmpty()) {
-            throw new ExternalNotFoundException("Error User not found!");
-        }
-
-        return userModeOptional;
+        return userRepository.findById(userId)
+                .orElseThrow(() -> new ExternalNotFoundException("Error User not found!"));
     }
 
     @Override
