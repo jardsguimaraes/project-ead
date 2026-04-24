@@ -1,6 +1,5 @@
 package com.ead.course.especifications;
 
-import java.util.Collection;
 import java.util.UUID;
 
 import org.springframework.data.jpa.domain.Specification;
@@ -10,9 +9,7 @@ import com.ead.course.models.CourseUserModel;
 import com.ead.course.models.LessonModel;
 import com.ead.course.models.ModuleModel;
 
-import jakarta.persistence.criteria.Expression;
 import jakarta.persistence.criteria.Join;
-import jakarta.persistence.criteria.Root;
 import net.kaczmarzyk.spring.data.jpa.domain.Equal;
 import net.kaczmarzyk.spring.data.jpa.domain.LikeIgnoreCase;
 import net.kaczmarzyk.spring.data.jpa.web.annotation.And;
@@ -40,34 +37,40 @@ public class SpecificationTemplate {
     public interface LessonSpec extends Specification<LessonModel> {
     }
 
-    // Arquitetura apresentada no curso, mais complexa(por ter um ROOT a mais) e propicia a falhar
-    // public static Specification<ModuleModel> moduleCourseId(final UUID courseId) {
-    //     return (root, query, criteriaBuilder) -> {
-    //         if (query == null) {
-    //             return criteriaBuilder.conjunction();
-    //         }
-    //         query.distinct(true);
-    //         Root<ModuleModel> module = root;
-    //         Root<CourseModel> course = query.from(CourseModel.class);
-    //         Expression<Collection<ModuleModel>> courseModules = course.get("modules");
-    //         return criteriaBuilder.and(criteriaBuilder.equal(course.get("courseId"), courseId),
-    //                 criteriaBuilder.isMember(module, courseModules));
-    //     };
+    // Arquitetura apresentada no curso, mais complexa(por ter um ROOT a mais) e
+    // propicia a falhar
+    // public static Specification<ModuleModel> moduleCourseId(final UUID courseId)
+    // {
+    // return (root, query, criteriaBuilder) -> {
+    // if (query == null) {
+    // return criteriaBuilder.conjunction();
+    // }
+    // query.distinct(true);
+    // Root<ModuleModel> module = root;
+    // Root<CourseModel> course = query.from(CourseModel.class);
+    // Expression<Collection<ModuleModel>> courseModules = course.get("modules");
+    // return criteriaBuilder.and(criteriaBuilder.equal(course.get("courseId"),
+    // courseId),
+    // criteriaBuilder.isMember(module, courseModules));
+    // };
     // }
 
-    // Arquitetura apresentada no curso, mais complexa(por ter um ROOT a mais) e propicia a falhar
-    // public static Specification<LessonModel> lessonModuleId(final UUID moduleId) {
-    //     return (root, query, criteriaBuilder) -> {
-    //         if (query == null) {
-    //             return criteriaBuilder.conjunction();
-    //         }
-    //         query.distinct(true);
-    //         Root<LessonModel> lesson = root;
-    //         Root<ModuleModel> module = query.from(ModuleModel.class);
-    //         Expression<Collection<LessonModel>> moduleLessons = module.get("lessons");
-    //         return criteriaBuilder.and(criteriaBuilder.equal(module.get("moduleId"), moduleId),
-    //                 criteriaBuilder.isMember(lesson, moduleLessons));
-    //     };
+    // Arquitetura apresentada no curso, mais complexa(por ter um ROOT a mais) e
+    // propicia a falhar
+    // public static Specification<LessonModel> lessonModuleId(final UUID moduleId)
+    // {
+    // return (root, query, criteriaBuilder) -> {
+    // if (query == null) {
+    // return criteriaBuilder.conjunction();
+    // }
+    // query.distinct(true);
+    // Root<LessonModel> lesson = root;
+    // Root<ModuleModel> module = query.from(ModuleModel.class);
+    // Expression<Collection<LessonModel>> moduleLessons = module.get("lessons");
+    // return criteriaBuilder.and(criteriaBuilder.equal(module.get("moduleId"),
+    // moduleId),
+    // criteriaBuilder.isMember(lesson, moduleLessons));
+    // };
     // }
 
     public static Specification<ModuleModel> moduleCourseId(final UUID courseId) {

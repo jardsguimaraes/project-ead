@@ -2,6 +2,7 @@ package com.ead.course.exceptions;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -63,5 +64,14 @@ public class GlobalExceptionHandler {
         log.error("HttpMessageNotReadableException message {} ", ex.getMessage());
 
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponse);
+    }
+
+    @ExceptionHandler(ExternalRestClientException.class)
+    public ResponseEntity<ErrorResponse> hanlderRestClientException(ExternalRestClientException ex) {
+        var statusCode = Objects.requireNonNull(ex.getHttpStatusCode(), "HttpStatusCode cannot be null");
+        var erroResponse = new ErrorResponse(ex.getHttpStatusCode().value(), ex.getMessage(), null);
+        log.error("Error calling microservice {}: {}", ex.getMicroservice(), ex.getMessage(), ex);
+
+        return ResponseEntity.status(statusCode).body(erroResponse);
     }
 }
