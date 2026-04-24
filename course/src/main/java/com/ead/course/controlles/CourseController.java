@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.ead.course.dots.CourseRecordDto;
@@ -53,8 +54,11 @@ public class CourseController {
 
     @SuppressWarnings("null")
     @GetMapping
-    public ResponseEntity<Page<CourseModel>> getAllCourses(SpecificationTemplate.CourseSpec spec, Pageable pageable) {
-        var coursePageModel = courseService.findAll(spec, pageable);
+    public ResponseEntity<Page<CourseModel>> getAllCourses(SpecificationTemplate.CourseSpec spec, Pageable pageable,
+            @RequestParam(required = false) UUID userId) {
+        var coursePageModel = userId != null
+                ? courseService.findAll(SpecificationTemplate.courseUserId(userId).and(spec), pageable)
+                : courseService.findAll(spec, pageable);
 
         if (!coursePageModel.isEmpty()) {
             for (CourseModel course : coursePageModel) {
