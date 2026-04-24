@@ -7,6 +7,7 @@ import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.HttpServerErrorException;
@@ -16,9 +17,9 @@ import org.springframework.web.client.RestClientException;
 
 import com.ead.course.dots.ResponsePageDto;
 import com.ead.course.dots.UserRecordDto;
+import com.ead.course.exceptions.ExternalNotFoundException;
 import com.ead.course.exceptions.ExternalRestClientException;
 
-import lombok.var;
 import lombok.extern.log4j.Log4j2;
 
 @Log4j2
@@ -41,9 +42,10 @@ public class AuthUserClient {
 
         try {
             var responsePageDto = restClient.get()
-                .uri(url)
-                .retrieve()
-                .body(new ParameterizedTypeReference<ResponsePageDto<UserRecordDto>>() {});
+                    .uri(url)
+                    .retrieve()
+                    .body(new ParameterizedTypeReference<ResponsePageDto<UserRecordDto>>() {
+                    });
 
             log.debug("Successful microservice AuthUser response: {}", responsePageDto);
             return responsePageDto;
@@ -61,5 +63,22 @@ public class AuthUserClient {
             throw new ExternalRestClientException(HttpStatus.BAD_GATEWAY, "Erro ao comunicar com o serviço de cursos",
                     "AuthUser", e);
         }
+    }
+
+    public UserRecordDto getOneUserById(UUID userId) {
+        var url = baseUrlAuthUser + "/users/" + userId;
+        log.debug("sending the request {}", url);
+
+        var responseUserRecordDto = restClient.get()
+                .uri(url)
+                .retrieve()
+                .onStatus(status -> status.value() == 404, (request, response) -> {
+                    log.error("Error: User not found {}", userId);
+                    throw new ExternalNotFoundException("Error: User not found");
+                })
+                .body(UserRecordDto.class);
+
+        log.debug("Successful microservice AuthUser response: {}", userId);
+        return responseUserRecordDto;
     }
 }

@@ -1,7 +1,12 @@
 package com.ead.course.services.impl;
 
+import java.util.Objects;
+import java.util.UUID;
+
 import org.springframework.stereotype.Service;
 
+import com.ead.course.models.CourseModel;
+import com.ead.course.models.CourseUserModel;
 import com.ead.course.repositories.CourseUserRepository;
 import com.ead.course.services.CourseUserService;
 
@@ -12,5 +17,18 @@ public class CourseUserServiceImpl implements CourseUserService {
 
     public CourseUserServiceImpl(CourseUserRepository courseUserRepository) {
         this.courseUserRepository = courseUserRepository;
+    }
+
+    @Override
+    public boolean existsByCourseAndUserId(CourseModel courseModel, UUID userId) {
+        return courseUserRepository.existsByCourseAndUserId(courseModel, userId);
+    }
+
+    @Override
+    public CourseUserModel saveAndSendSubscriptionUserInCourse(CourseUserModel courseUserModel) {
+        Objects.requireNonNull(courseUserModel, "courseUserModel cannot be null");
+        courseUserModel = courseUserRepository.save(courseUserModel);
+
+        return courseUserModel;
     }
 }

@@ -26,3 +26,10 @@ spring:
     jackson:
         serialization:
             "[INDENT_OUTPUT]": true
+
+logging:
+    level:
+        root: INFO
+        "[com.ead.course]": TRACE
+        "[org.springframework.web]": DEBUG
+        "[org.hibernate]": INFO
