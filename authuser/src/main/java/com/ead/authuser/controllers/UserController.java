@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.ead.authuser.dtos.UserRecordDto;
@@ -39,8 +40,12 @@ public class UserController {
 
     @SuppressWarnings("null")
     @GetMapping
-    public ResponseEntity<Page<UserModel>> getAllUsers(SpecificationTemplate.UserSpec spec, Pageable pageable) {
-        var userPageModel = userService.findAll(spec, pageable);
+    public ResponseEntity<Page<UserModel>> getAllUsers(SpecificationTemplate.UserSpec spec, Pageable pageable,
+            @RequestParam(required = false) UUID courseId) {
+        var userPageModel = courseId != null
+                ? userService.findAll(SpecificationTemplate.userCourseId(courseId).and(spec), pageable)
+                : userService.findAll(spec, pageable);
+
         if (!userPageModel.isEmpty()) {
             for (UserModel user : userPageModel) {
                 user.add(linkTo(methodOn(UserController.class).getOneUser(user.getUserId())).withSelfRel());
