@@ -10,6 +10,9 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+import lombok.Getter;
+
+@Getter
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class ResponsePageDto<T> extends PageImpl<T> {
 
@@ -19,9 +22,5 @@ public class ResponsePageDto<T> extends PageImpl<T> {
     public ResponsePageDto(@JsonProperty("content") List<T> content, @JsonProperty("page") PageMetadata page) {
         super(content, PageRequest.of(page.number(), page.size()), page.totalElements());
         this.page = page;
-    }
-
-    public PageMetadata getPage() {
-        return page;
     }
 }
