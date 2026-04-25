@@ -22,8 +22,8 @@ import lombok.extern.log4j.Log4j2;
 @ControllerAdvice
 public class GlobalExceptionHandler {
 
-    @ExceptionHandler(NotFoundException.class)
-    public ResponseEntity<ErrorResponse> handleNotFoundException(NotFoundException ex) {
+    @ExceptionHandler(ExternalNotFoundException.class)
+    public ResponseEntity<ErrorResponse> handleNotFoundException(ExternalNotFoundException ex) {
         var errorResponse = new ErrorResponse(HttpStatus.NOT_FOUND.value(), ex.getMessage(), null);
         log.error("NotFoundException message {} ", ex.getMessage());
 

@@ -14,7 +14,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.ead.course.dots.CourseRecordDto;
-import com.ead.course.exceptions.NotFoundException;
+import com.ead.course.exceptions.ExternalNotFoundException;
 import com.ead.course.models.CourseModel;
 import com.ead.course.models.LessonModel;
 import com.ead.course.models.ModuleModel;
@@ -82,7 +82,7 @@ public class CourseServiceImpl implements CourseService {
     public CourseModel findById(UUID courseId) {
         Objects.requireNonNull(courseId, "courseId cannot be null");
         return courseRepository.findById(courseId)
-                .orElseThrow(() -> new NotFoundException("Error: Course Not found!"));
+                .orElseThrow(() -> new ExternalNotFoundException("Error: Course Not found!"));
     }
 
     @Override
