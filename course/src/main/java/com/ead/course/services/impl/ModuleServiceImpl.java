@@ -14,7 +14,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.ead.course.dots.ModuleRecordDto;
-import com.ead.course.exceptions.NotFoundException;
+import com.ead.course.exceptions.ExternalNotFoundException;
 import com.ead.course.models.CourseModel;
 import com.ead.course.models.LessonModel;
 import com.ead.course.models.ModuleModel;
@@ -65,7 +65,7 @@ public class ModuleServiceImpl implements ModuleService {
     @Override
     public ModuleModel findModuleIntoCourse(UUID moduleId, UUID courseId) {
         return moduleRepository.findModuleIntoCourse(moduleId, courseId)
-                .orElseThrow(() -> new NotFoundException("Error: Module Not found!"));
+                .orElseThrow(() -> new ExternalNotFoundException("Error: Module Not found!"));
     }
 
     @Override
@@ -80,7 +80,7 @@ public class ModuleServiceImpl implements ModuleService {
     public ModuleModel findById(UUID moduleId) {
         Objects.requireNonNull(moduleId, "moduleId cannot be null");
         return moduleRepository.findById(moduleId)
-                .orElseThrow(() -> new NotFoundException("Error: Module Not found!"));
+                .orElseThrow(() -> new ExternalNotFoundException("Error: Module Not found!"));
     }
 
     @Override

@@ -12,7 +12,7 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import com.ead.course.dots.LessonRecordDto;
-import com.ead.course.exceptions.NotFoundException;
+import com.ead.course.exceptions.ExternalNotFoundException;
 import com.ead.course.models.LessonModel;
 import com.ead.course.models.ModuleModel;
 import com.ead.course.repositories.LessonRepository;
@@ -43,7 +43,7 @@ public class LessonServiceImpl implements LessonService {
     @Override
     public LessonModel findLessonIntoModule(UUID moduleId, UUID lessonId) {
         return lessonRepository.findLessonIntoModule(moduleId, lessonId)
-                .orElseThrow(() -> new NotFoundException("Error: Lesson Not found!"));
+                .orElseThrow(() -> new ExternalNotFoundException("Error: Lesson Not found!"));
     }
 
     @Override

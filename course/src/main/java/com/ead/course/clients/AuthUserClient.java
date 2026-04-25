@@ -1,5 +1,6 @@
 package com.ead.course.clients;
 
+import java.util.Objects;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Value;
@@ -7,6 +8,7 @@ import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.HttpServerErrorException;
@@ -14,11 +16,12 @@ import org.springframework.web.client.ResourceAccessException;
 import org.springframework.web.client.RestClient;
 import org.springframework.web.client.RestClientException;
 
+import com.ead.course.dots.CourseUserRecordDto;
 import com.ead.course.dots.ResponsePageDto;
 import com.ead.course.dots.UserRecordDto;
+import com.ead.course.exceptions.ExternalNotFoundException;
 import com.ead.course.exceptions.ExternalRestClientException;
 
-import lombok.var;
 import lombok.extern.log4j.Log4j2;
 
 @Log4j2
@@ -41,25 +44,77 @@ public class AuthUserClient {
 
         try {
             var responsePageDto = restClient.get()
-                .uri(url)
-                .retrieve()
-                .body(new ParameterizedTypeReference<ResponsePageDto<UserRecordDto>>() {});
+                    .uri(url)
+                    .retrieve()
+                    .body(new ParameterizedTypeReference<ResponsePageDto<UserRecordDto>>() {
+                    });
 
             log.debug("Successful microservice AuthUser response: {}", responsePageDto);
             return responsePageDto;
         } catch (HttpClientErrorException | HttpServerErrorException e) {
-            log.error("Erro ao comunicar com o serviço de authuser: ", e.getMessage());
+            log.error("Erro ao comunicar com o serviço de authuser: {}", e);
             throw new ExternalRestClientException(e.getStatusCode(),
                     "Erro ao comunicar com o serviço de authuser: " + e.getResponseBodyAsString(),
                     "AuthUser", e);
         } catch (ResourceAccessException e) {
-            log.error("Erro ao comunicar com o serviço de authuser: ", e.getMessage());
+            log.error("Erro ao comunicar com o serviço de authuser: {}", e);
             throw new ExternalRestClientException(HttpStatus.SERVICE_UNAVAILABLE,
                     "Erro ao comunicar com o serviço de authuser", "AuthUser", e);
         } catch (RestClientException e) {
-            log.error("Erro ao comunicar com o serviço de authuser: ", e.getMessage());
+            log.error("Erro ao comunicar com o serviço de authuser: {}", e);
             throw new ExternalRestClientException(HttpStatus.BAD_GATEWAY, "Erro ao comunicar com o serviço de cursos",
                     "AuthUser", e);
+        }
+    }
+
+    public UserRecordDto getOneUserById(UUID userId) {
+        var url = baseUrlAuthUser + "/users/" + userId;
+        log.debug("sending the request {}", url);
+
+        var responseUserRecordDto = restClient.get()
+                .uri(url)
+                .retrieve()
+                .onStatus(status -> status.value() == 404, (request, response) -> {
+                    log.error("Error: User not found {}", userId);
+                    throw new ExternalNotFoundException("Error: User not found");
+                })
+                .body(UserRecordDto.class);
+
+        log.debug("Successful microservice AuthUser response: {}", userId);
+        return responseUserRecordDto;
+    }
+
+    public void postSubscriptionUserInCourse(UUID courseId, UUID userId) {
+        var url = baseUrlAuthUser + "/users/" + userId + "/courses/subscription";
+        log.debug("sending the request {}", url);
+
+        try {
+            var courseUserRecordDto = new CourseUserRecordDto(courseId, userId);
+            var contenType = MediaType.APPLICATION_JSON;
+            Objects.requireNonNull(contenType, "contenType cannot be null");
+
+            var response = restClient.post()
+                    .uri(url)
+                    .contentType(contenType)
+                    .accept(contenType)
+                    .body(courseUserRecordDto)
+                    .retrieve()
+                    .toBodilessEntity();
+
+            log.debug("POST AuthUser status: {}", response.getStatusCode());
+        } catch (HttpClientErrorException | HttpServerErrorException e) {
+            log.error("Erro ao comunicar POST com o serviço de authuser: {}", e);
+            throw new ExternalRestClientException(e.getStatusCode(),
+                    "Erro ao comunicar POST com o serviço de authuser: " + e.getResponseBodyAsString(),
+                    "AuthUser", e);
+        } catch (ResourceAccessException e) {
+            log.error("Erro ao comunicar POST com o serviço de authuser: {}", e);
+            throw new ExternalRestClientException(HttpStatus.SERVICE_UNAVAILABLE,
+                    "Erro ao comunicar POST com o serviço de authuser", "AuthUser", e);
+        } catch (RestClientException e) {
+            log.error("Erro ao comunicar POST com o serviço de authuser: {}", e.getMessage());
+            throw new ExternalRestClientException(HttpStatus.BAD_GATEWAY,
+                    "Erro ao comunicar POST com o serviço de cursos", "AuthUser", e);
         }
     }
 }
