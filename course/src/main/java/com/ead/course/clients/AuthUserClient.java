@@ -96,6 +96,7 @@ public class AuthUserClient {
             var response = restClient.post()
                     .uri(url)
                     .contentType(contenType)
+                    .accept(contenType)
                     .body(courseUserRecordDto)
                     .retrieve()
                     .toBodilessEntity();
