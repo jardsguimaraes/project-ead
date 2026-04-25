@@ -1,16 +1,35 @@
 package com.ead.authuser.services.impl;
 
+import java.util.Objects;
+import java.util.UUID;
+
 import org.springframework.stereotype.Service;
 
+import com.ead.authuser.models.UserCourseModel;
+import com.ead.authuser.models.UserModel;
 import com.ead.authuser.repositories.UserCourseRepository;
+import com.ead.authuser.repositories.UserRepository;
 import com.ead.authuser.services.UserCourseService;
 
 @Service
-public class UserCourseServiceImpl implements UserCourseService{
+public class UserCourseServiceImpl implements UserCourseService {
 
-    final UserCourseRepository UsercourseRepository;
+    final UserRepository userRepository;
+    final UserCourseRepository userCourseRepository;
 
-    public UserCourseServiceImpl(UserCourseRepository usercourseRepository) {
-        UsercourseRepository = usercourseRepository;
+    public UserCourseServiceImpl(UserCourseRepository userCourseRepository, UserRepository userRepository) {
+        this.userCourseRepository = userCourseRepository;
+        this.userRepository = userRepository;
+    }
+
+    @Override
+    public boolean existsByUserAndCourse(UserModel userModel, UUID courseId) {
+        return userCourseRepository.existsByUserAndCourseId(userModel, courseId);
+    }
+
+    @Override
+    public UserCourseModel save(UserCourseModel userCourseModel) {
+        Objects.requireNonNull(userCourseModel, "userCourseModel cannot be null");
+        return userCourseRepository.save(userCourseModel);
     }
 }

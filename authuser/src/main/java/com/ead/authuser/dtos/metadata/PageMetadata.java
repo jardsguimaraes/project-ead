@@ -1,4 +1,4 @@
-package com.ead.authuser.metadata;
+package com.ead.authuser.dtos.metadata;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 

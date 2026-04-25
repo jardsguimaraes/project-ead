@@ -2,7 +2,6 @@ package com.ead.authuser.controllers;
 
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.*;
 
-import java.util.Optional;
 import java.util.UUID;
 
 import org.springframework.data.domain.Page;
@@ -21,7 +20,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.ead.authuser.dtos.UserRecordDto;
 import com.ead.authuser.models.UserModel;
-import com.ead.authuser.services.UserServices;
+import com.ead.authuser.services.UserService;
 import com.fasterxml.jackson.annotation.JsonView;
 
 import lombok.extern.log4j.Log4j2;
@@ -32,9 +31,9 @@ import specifications.SpecificationTemplate;
 @RequestMapping("/users")
 public class UserController {
 
-    final UserServices userService;
+    final UserService userService;
 
-    public UserController(UserServices userService) {
+    public UserController(UserService userService) {
         this.userService = userService;
     }
 
@@ -56,13 +55,13 @@ public class UserController {
 
     @GetMapping("/{userId}")
     public ResponseEntity<Object> getOneUser(@PathVariable(value = "userId") UUID userId) {
-        return ResponseEntity.status(HttpStatus.OK).body(userService.findById(userId).get());
+        return ResponseEntity.status(HttpStatus.OK).body(userService.findById(userId));
     }
 
     @DeleteMapping("/{userId}")
     public ResponseEntity<Object> deleteUser(@PathVariable(value = "userId") UUID userId) {
         log.debug("DELETE deleteUser userId received {}", userId);
-        userService.delete(userService.findById(userId).get());
+        userService.delete(userService.findById(userId));
 
         return ResponseEntity.status(HttpStatus.OK).body("User deleted successfully.");
     }
@@ -73,7 +72,7 @@ public class UserController {
             @RequestBody @Validated(UserRecordDto.UserView.UserPut.class) @JsonView(UserRecordDto.UserView.UserPut.class) UserRecordDto userRecordDto) {
         log.debug("PUT updateUser userRecordDto received {}", userRecordDto);
         return ResponseEntity.status(HttpStatus.OK)
-                .body(userService.updateUser(userRecordDto, userService.findById(userId).get()));
+                .body(userService.updateUser(userRecordDto, userService.findById(userId)));
     }
 
     @PutMapping("/{userId}/password")
@@ -81,14 +80,14 @@ public class UserController {
             @PathVariable(value = "userId") UUID userId,
             @RequestBody @Validated(UserRecordDto.UserView.PasswordPut.class) @JsonView(UserRecordDto.UserView.PasswordPut.class) UserRecordDto userRecordDto) {
         log.debug("PUT updatePassword userRecordDto received {}", userRecordDto);
-        Optional<UserModel> userModelOptional = userService.findById(userId);
+        var userModel = userService.findById(userId);
 
-        if (!userModelOptional.get().getPassword().equals(userRecordDto.oldPassword())) {
+        if (!userModel.getPassword().equals(userRecordDto.oldPassword())) {
             log.warn("Mismatched old password! userId {} ", userId);
             return ResponseEntity.status(HttpStatus.CONFLICT).body("Error: Mismarched old password!");
         }
 
-        userService.updatePassword(userRecordDto, userModelOptional.get());
+        userService.updatePassword(userRecordDto, userModel);
         log.debug("updatePassword registered successfully for userId: {}", userId);
 
         return ResponseEntity.status(HttpStatus.OK).body("Password updated successfully.");
@@ -100,6 +99,6 @@ public class UserController {
             @RequestBody @Validated(UserRecordDto.UserView.ImagePut.class) @JsonView(UserRecordDto.UserView.ImagePut.class) UserRecordDto userRecordDto) {
         log.debug("PUT updateImage userRecordDto received {}", userRecordDto);
         return ResponseEntity.status(HttpStatus.OK)
-                .body(userService.updateImage(userRecordDto, userService.findById(userId).get()));
+                .body(userService.updateImage(userRecordDto, userService.findById(userId)));
     }
 }

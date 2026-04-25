@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.ead.authuser.dtos.UserRecordDto;
-import com.ead.authuser.services.UserServices;
+import com.ead.authuser.services.UserService;
 import com.fasterxml.jackson.annotation.JsonView;
 
 import lombok.extern.log4j.Log4j2;
@@ -24,9 +24,9 @@ public class AuthenticationController {
     // --Caso não utilize o Lombok(@Log4j2) para criar o logger, é necessário criar
     // manualmente.
 
-    final UserServices userService;
+    final UserService userService;
 
-    public AuthenticationController(UserServices userService) {
+    public AuthenticationController(UserService userService) {
         this.userService = userService;
     }
 
