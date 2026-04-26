@@ -2,6 +2,7 @@ package com.ead.course.controlles;
 
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.*;
 
+import java.util.Objects;
 import java.util.UUID;
 
 import org.springframework.data.domain.Page;
@@ -9,6 +10,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -23,6 +25,7 @@ import com.ead.course.dots.CourseRecordDto;
 import com.ead.course.especifications.SpecificationTemplate;
 import com.ead.course.models.CourseModel;
 import com.ead.course.services.CourseService;
+import com.ead.course.validations.CourseValidation;
 
 import jakarta.validation.Valid;
 import lombok.extern.log4j.Log4j2;
@@ -32,20 +35,25 @@ import lombok.extern.log4j.Log4j2;
 @RequestMapping("/courses")
 public class CourseController {
 
-    final CourseService courseService;
+    private final CourseService courseService;
+    private final CourseValidation courseValidation;
 
-    public CourseController(CourseService courseService) {
+    public CourseController(CourseService courseService, CourseValidation courseValidation) {
         this.courseService = courseService;
+        this.courseValidation = courseValidation;
     }
 
     @Transactional
     @PostMapping
-    public ResponseEntity<Object> saveCourse(@RequestBody @Valid CourseRecordDto courseRecordDto) {
+    public ResponseEntity<Object> saveCourse(@RequestBody CourseRecordDto courseRecordDto, Errors errors) {
+        Objects.requireNonNull(courseRecordDto, "courseRecordDto cannot be null");
+        Objects.requireNonNull(errors, "errors cannot be null");
         log.debug("POST saveCourse courseRecordDto received {} ", courseRecordDto);
 
-        if (courseService.existsByName(courseRecordDto.name())) {
-            log.warn("Course name {} is already taken", courseRecordDto.name());
-            return ResponseEntity.status(HttpStatus.CONFLICT).body("Error: Course Name is Already Taken!");
+        courseValidation.validate(courseRecordDto, errors);
+
+        if (errors.hasErrors()) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errors.getAllErrors());
         }
 
         log.debug("Course saved successfully {} ", courseRecordDto);
