@@ -20,6 +20,9 @@ import com.ead.authuser.models.UserModel;
 import com.ead.authuser.repositories.UserRepository;
 import com.ead.authuser.services.UserService;
 
+import lombok.extern.log4j.Log4j2;
+
+@Log4j2
 @Service
 public class UserServiceImpl implements UserService {
 
@@ -46,6 +49,8 @@ public class UserServiceImpl implements UserService {
     public void delete(UserModel userModel) {
         Objects.requireNonNull(userModel, "User model cannot be null");
         userRepository.delete(userModel);
+
+        log.debug("User successfully deleted {}", userModel.getUserId());
     }
 
     @Override
@@ -59,6 +64,7 @@ public class UserServiceImpl implements UserService {
         userModel.setCreationDate(LocalDateTime.now(ZoneId.of("UTC")));
         userModel.setLastUpdateDate(LocalDateTime.now(ZoneId.of("UTC")));
 
+        log.debug("User created successfully {}", userModel.getUserId());
         return userRepository.save(userModel);
     }
 
@@ -77,6 +83,8 @@ public class UserServiceImpl implements UserService {
         userModel.setFullName(userRecordDto.fullName());
         userModel.setPhoneNumber(userRecordDto.phoneNumber());
         userModel.setLastUpdateDate(LocalDateTime.now(ZoneId.of("UTC")));
+
+        log.debug("User updated successfully {}", userModel.getUserId());
         return userRepository.save(userModel);
     }
 
@@ -85,6 +93,7 @@ public class UserServiceImpl implements UserService {
         userModel.setPassword(userRecordDto.password());
         userModel.setLastUpdateDate(LocalDateTime.now(ZoneId.of("UTC")));
 
+        log.debug("The password for user {} has been successfully updated.", userModel.getUserId());
         return userRepository.save(userModel);
     }
 
@@ -93,6 +102,7 @@ public class UserServiceImpl implements UserService {
         userModel.setImageUrl(userRecordDto.imageUrl());
         userModel.setLastUpdateDate(LocalDateTime.now(ZoneId.of("UTC")));
 
+        log.debug("The image for user {} has been successfully updated.", userModel.getUserId());
         return userRepository.save(userModel);
     }
 
@@ -100,6 +110,15 @@ public class UserServiceImpl implements UserService {
     public Page<UserModel> findAll(Specification<UserModel> spec, Pageable pageable) {
         Objects.requireNonNull(pageable, "Pageable cannot be null");
         return userRepository.findAll(spec, pageable);
+    }
+
+    @Override
+    public UserModel registerInstructor(UserModel userModel) {
+        userModel.setUserType(UserType.INSTRUCTOR);
+        userModel.setLastUpdateDate(LocalDateTime.now(ZoneId.of("UTC")));
+
+        log.debug("Instructor successfully registered {}", userModel.getUserId());
+        return userRepository.save(userModel);
     }
 
 }
