@@ -1,7 +1,10 @@
 package com.ead.authuser.controllers;
 
+import java.util.Objects;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.Errors;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -11,6 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.ead.authuser.dtos.UserRecordDto;
 import com.ead.authuser.services.UserService;
+import com.ead.authuser.validations.UserValidation;
 import com.fasterxml.jackson.annotation.JsonView;
 
 import lombok.extern.log4j.Log4j2;
@@ -24,28 +28,27 @@ public class AuthenticationController {
     // --Caso não utilize o Lombok(@Log4j2) para criar o logger, é necessário criar
     // manualmente.
 
-    final UserService userService;
+    private final UserService userService;
+    private final UserValidation userValidation;
 
-    public AuthenticationController(UserService userService) {
+    public AuthenticationController(UserService userService, UserValidation userValidation) {
         this.userService = userService;
+        this.userValidation = userValidation;
     }
 
     @PostMapping("/signup")
     public ResponseEntity<Object> registerUser(
-            @RequestBody @Validated(UserRecordDto.UserView.RegistrationPost.class) @JsonView(UserRecordDto.UserView.RegistrationPost.class) UserRecordDto userRecordDto) {
+            @RequestBody @Validated(UserRecordDto.UserView.RegistrationPost.class) @JsonView(UserRecordDto.UserView.RegistrationPost.class) UserRecordDto userRecordDto,
+            Errors errors) {
+        Objects.requireNonNull(userRecordDto, "null");
+        Objects.requireNonNull(errors, "null");
         log.debug("POST registerUser userRecordDto {}", userRecordDto);
 
-        if (userService.existsByUserName(userRecordDto.username())) {
-            log.warn("Username {} is Already taken ", userRecordDto.username());
-            return ResponseEntity.status(HttpStatus.CONFLICT).body("Error: Username is already taken!");
+        userValidation.validate(userRecordDto, errors);
+        if (errors.hasErrors()) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errors.getAllErrors());
         }
 
-        if (userService.existsByEmail(userRecordDto.email())) {
-            log.warn("Email {} is Already taken ", userRecordDto.email());
-            return ResponseEntity.status(HttpStatus.CONFLICT).body("Error: Email is already taken!");
-        }
-
-        log.debug("User registered successfully: {}", userRecordDto.username());
         return ResponseEntity.status(HttpStatus.CREATED).body(userService.registerUser(userRecordDto));
     }
 
