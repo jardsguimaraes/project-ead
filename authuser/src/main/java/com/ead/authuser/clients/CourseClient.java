@@ -43,22 +43,50 @@ public class CourseClient {
             var responsePageDto = restClient.get()
                     .uri(url)
                     .retrieve()
-                    .body(new ParameterizedTypeReference<ResponsePageDto<CourseRecordDto>>() {});
+                    .body(new ParameterizedTypeReference<ResponsePageDto<CourseRecordDto>>() {
+                    });
 
             log.debug("Successful microservice Course response: {}", responsePageDto);
             return responsePageDto;
         } catch (HttpClientErrorException | HttpServerErrorException e) {
-            log.error("Erro ao comunicar com o serviço de cursos: ", e.getMessage());
+            log.error("Error Request DELTE RestClient with couse: ", e.getMessage());
             throw new ExternalRestClientException(e.getStatusCode(),
-                    "Erro ao comunicar com o serviço de cursos: " + e.getResponseBodyAsString(),
+                    "Error Request DELTE RestClient with couse: " + e.getResponseBodyAsString(),
                     "Course", e);
         } catch (ResourceAccessException e) {
-            log.error("Erro ao comunicar com o serviço de cursos: ", e.getMessage());
+            log.error("Error Request DELTE RestClient with couse: ", e.getMessage());
             throw new ExternalRestClientException(HttpStatus.SERVICE_UNAVAILABLE,
-                    "Erro ao comunicar com o serviço de cursos", "Course", e);
+                    "Error Request DELTE RestClient with couse", "Course", e);
         } catch (RestClientException e) {
-            log.error("Erro ao comunicar com o serviço de cursos: ", e.getMessage());
-            throw new ExternalRestClientException(HttpStatus.BAD_GATEWAY, "Erro ao comunicar com o serviço de cursos",
+            log.error("Error Request DELTE RestClient with couse: ", e.getMessage());
+            throw new ExternalRestClientException(HttpStatus.BAD_GATEWAY, "Error Request DELTE RestClient with couse",
+                    "Course", e);
+        }
+    }
+
+    public void deleteUserCourseInCourse(UUID userId) {
+        String url = baseUrlCourse + "/courses/users/" + userId;
+        log.debug("Request URL:{}", url);
+
+        try {
+            restClient.delete()
+                    .uri(url)
+                    .retrieve()
+                    .toBodilessEntity();
+
+            log.debug("Course {} successfully deleted.", userId);
+        } catch (HttpClientErrorException | HttpServerErrorException e) {
+            log.error("Error Request DELTE RestClient with couse: ", e.getMessage());
+            throw new ExternalRestClientException(e.getStatusCode(),
+                    "Error Request DELTE RestClient with couse: " + e.getResponseBodyAsString(),
+                    "Course", e);
+        } catch (ResourceAccessException e) {
+            log.error("Error Request DELTE RestClient with couse: ", e.getMessage());
+            throw new ExternalRestClientException(HttpStatus.SERVICE_UNAVAILABLE,
+                    "Error Request DELTE RestClient with couse", "Course", e);
+        } catch (RestClientException e) {
+            log.error("Error Request DELTE RestClient with couse: ", e.getMessage());
+            throw new ExternalRestClientException(HttpStatus.BAD_GATEWAY, "Error Request DELTE RestClient with couse",
                     "Course", e);
         }
     }
