@@ -117,4 +117,32 @@ public class AuthUserClient {
                     "Erro ao comunicar POST com o serviço de cursos", "AuthUser", e);
         }
     }
+
+    public void deleteSubscriptionUserInAuthUser(UUID courseId) {
+        var url = baseUrlAuthUser + "/users/courses/" + courseId;
+        log.debug("sending the request {}", url);
+
+        try {
+            var response = restClient.delete()
+                    .uri(url)
+                    .retrieve()
+                    .toBodilessEntity();
+
+            log.debug("DELETE AuthUser status: {}", response.getStatusCode());
+        } catch (HttpClientErrorException | HttpServerErrorException e) {
+            log.error("Erro ao comunicar DELETE com o serviço de authuser: {}", e);
+            throw new ExternalRestClientException(e.getStatusCode(),
+                    "Erro ao comunicar DELETE com o serviço de authuser: " + e.getResponseBodyAsString(),
+                    "AuthUser", e);
+        } catch (ResourceAccessException e) {
+            log.error("Erro ao comunicar DELETE com o serviço de authuser: {}", e);
+            throw new ExternalRestClientException(HttpStatus.SERVICE_UNAVAILABLE,
+                    "Erro ao comunicar DELETE com o serviço de authuser", "AuthUser", e);
+        } catch (RestClientException e) {
+            log.error("Erro ao comunicar DELETE com o serviço de authuser: {}", e.getMessage());
+            throw new ExternalRestClientException(HttpStatus.BAD_GATEWAY,
+                    "Erro ao comunicar DELETE com o serviço de cursos", "AuthUser", e);
+        }
+
+    }
 }
