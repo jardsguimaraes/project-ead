@@ -32,4 +32,14 @@ public class UserCourseServiceImpl implements UserCourseService {
         Objects.requireNonNull(userCourseModel, "userCourseModel cannot be null");
         return userCourseRepository.save(userCourseModel);
     }
+
+    @Override
+    public boolean existsByCourseId(UUID courseId) {
+        return userCourseRepository.existsByCourseId(courseId);
+    }
+
+    @Override
+    public void deleteAllByCourseId(UUID courseId) {
+        userCourseRepository.deleteAllByCourseId(courseId);
+    }
 }

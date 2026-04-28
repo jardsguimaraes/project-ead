@@ -8,6 +8,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -58,6 +59,7 @@ public class UserController {
         return ResponseEntity.status(HttpStatus.OK).body(userService.findById(userId));
     }
 
+    @Transactional
     @DeleteMapping("/{userId}")
     public ResponseEntity<Object> deleteUser(@PathVariable(value = "userId") UUID userId) {
         log.debug("DELETE deleteUser userId received {}", userId);
@@ -66,6 +68,7 @@ public class UserController {
         return ResponseEntity.status(HttpStatus.OK).body("User deleted successfully.");
     }
 
+    @Transactional
     @PutMapping("/{userId}")
     public ResponseEntity<Object> updateUser(
             @PathVariable(value = "userId") UUID userId,
@@ -75,6 +78,7 @@ public class UserController {
                 .body(userService.updateUser(userRecordDto, userService.findById(userId)));
     }
 
+    @Transactional
     @PutMapping("/{userId}/password")
     public ResponseEntity<Object> updatePassword(
             @PathVariable(value = "userId") UUID userId,
@@ -93,6 +97,7 @@ public class UserController {
         return ResponseEntity.status(HttpStatus.OK).body("Password updated successfully.");
     }
 
+    @Transactional
     @PutMapping("/{userId}/image")
     public ResponseEntity<Object> updateImage(
             @PathVariable(value = "userId") UUID userId,
