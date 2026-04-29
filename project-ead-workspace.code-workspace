@@ -15,6 +15,10 @@
 		{
 			"name": "service-registry",
 			"path": "service-registry"
+		},
+		{
+			"name": "api-gateway",
+			"path": "api-gateway"
 		}
 	],
 	"settings": {}
