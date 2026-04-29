@@ -1,4 +1,4 @@
-package com.ead.notification;
+package ead.com.notification;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
