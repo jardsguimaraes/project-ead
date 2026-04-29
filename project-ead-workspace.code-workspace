@@ -11,6 +11,10 @@
 		},
 		{
 			"path": "payment"
+		},
+		{
+			"name": "service-registry",
+			"path": "service-registry"
 		}
 	],
 	"settings": {}
