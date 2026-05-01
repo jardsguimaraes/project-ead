@@ -63,31 +63,4 @@ public class CourseClient {
                     "Course", e);
         }
     }
-
-    public void deleteUserCourseInCourse(UUID userId) {
-        String url = baseUrlCourse + "/courses/users/" + userId;
-        log.debug("Request URL:{}", url);
-
-        try {
-            restClient.delete()
-                    .uri(url)
-                    .retrieve()
-                    .toBodilessEntity();
-
-            log.debug("Course {} successfully deleted.", userId);
-        } catch (HttpClientErrorException | HttpServerErrorException e) {
-            log.error("Error Request DELTE RestClient with couse: ", e.getMessage());
-            throw new ExternalRestClientException(e.getStatusCode(),
-                    "Error Request DELTE RestClient with couse: " + e.getResponseBodyAsString(),
-                    "Course", e);
-        } catch (ResourceAccessException e) {
-            log.error("Error Request DELTE RestClient with couse: ", e.getMessage());
-            throw new ExternalRestClientException(HttpStatus.SERVICE_UNAVAILABLE,
-                    "Error Request DELTE RestClient with couse", "Course", e);
-        } catch (RestClientException e) {
-            log.error("Error Request DELTE RestClient with couse: ", e.getMessage());
-            throw new ExternalRestClientException(HttpStatus.BAD_GATEWAY, "Error Request DELTE RestClient with couse",
-                    "Course", e);
-        }
-    }
 }

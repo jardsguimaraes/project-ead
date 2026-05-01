@@ -12,14 +12,11 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
-import com.ead.authuser.clients.CourseClient;
 import com.ead.authuser.dtos.UserRecordDto;
 import com.ead.authuser.enums.UserStatus;
 import com.ead.authuser.enums.UserType;
 import com.ead.authuser.exceptions.ExternalNotFoundException;
-import com.ead.authuser.models.UserCourseModel;
 import com.ead.authuser.models.UserModel;
-import com.ead.authuser.repositories.UserCourseRepository;
 import com.ead.authuser.repositories.UserRepository;
 import com.ead.authuser.services.UserService;
 
@@ -29,15 +26,10 @@ import lombok.extern.log4j.Log4j2;
 @Service
 public class UserServiceImpl implements UserService {
 
-    private final CourseClient courseClient;
     private final UserRepository userRepository;
-    private final UserCourseRepository userCourseRepository;
 
-    public UserServiceImpl(UserRepository userRepository, UserCourseRepository userCourseRepository,
-            CourseClient courseClient) {
+    public UserServiceImpl(UserRepository userRepository) {
         this.userRepository = userRepository;
-        this.userCourseRepository = userCourseRepository;
-        this.courseClient = courseClient;
     }
 
     @Override
@@ -55,23 +47,9 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void delete(UserModel userModel) {
-        var deleteUserCourseInCourse = false;
         Objects.requireNonNull(userModel, "User model cannot be null");
 
-        List<UserCourseModel> userCourseModelList = userCourseRepository
-                .findAllUserCourseIntoUser(userModel.getUserId());
-
-        if (!userCourseModelList.isEmpty()) {
-            userCourseRepository.deleteAll(userCourseModelList);
-            deleteUserCourseInCourse = true;
-        }
-
         userRepository.delete(userModel);
-
-        if (deleteUserCourseInCourse) {
-            courseClient.deleteUserCourseInCourse(userModel.getUserId());
-        }
-
         log.debug("User successfully deleted {}", userModel.getUserId());
     }
 
