@@ -12,7 +12,7 @@ spring:
     application:
         name: ead-course-service
     datasource:
-        url: jdbc:postgresql://localhost:5432/ead_course
+        url: jdbc:postgresql://localhost:5432/ead_course_v2
         username: postgres
         password: adm10092007
         driver-class-name: org.postgresql.Driver

@@ -7,9 +7,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.validation.Errors;
 import org.springframework.validation.Validator;
 
-import com.ead.course.clients.AuthUserClient;
 import com.ead.course.dots.CourseRecordDto;
-import com.ead.course.enums.UserType;
 import com.ead.course.services.CourseService;
 
 import lombok.extern.log4j.Log4j2;
@@ -20,12 +18,10 @@ public class CourseValidation implements Validator {
 
     private final Validator validator;
     private final CourseService courseService;
-    private final AuthUserClient authUserClient;
 
-    public CourseValidation(Validator validator, CourseService courseService, AuthUserClient authUserClient) {
+    public CourseValidation(Validator validator, CourseService courseService) {
         this.validator = validator;
         this.courseService = courseService;
-        this.authUserClient = authUserClient;
     }
 
     @Override
@@ -54,13 +50,15 @@ public class CourseValidation implements Validator {
     }
 
     private void validateUserInstructor(UUID userInstructor, Errors errors) {
-        var responseUserInstructor = authUserClient.getOneUserById(userInstructor);
-        var userType = responseUserInstructor.userType();
+        // var responseUserInstructor = authUserClient.getOneUserById(userInstructor);
+        // var userType = responseUserInstructor.userType();
 
-        if (!(userType.equals(UserType.ADMIN) || userType.equals(UserType.INSTRUCTOR))) {
-            errors.rejectValue("userInstructor", "userInstructorError", "User must be INSTRUCTOR or ADMIN");
-            log.error("Error validation userInstrctor {}", userInstructor);
-        }
+        // if (!(userType.equals(UserType.ADMIN) ||
+        // userType.equals(UserType.INSTRUCTOR))) {
+        // errors.rejectValue("userInstructor", "userInstructorError", "User must be
+        // INSTRUCTOR or ADMIN");
+        // log.error("Error validation userInstrctor {}", userInstructor);
+        // }
     }
 
 }

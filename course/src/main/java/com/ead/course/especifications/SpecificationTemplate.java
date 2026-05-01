@@ -5,7 +5,6 @@ import java.util.UUID;
 import org.springframework.data.jpa.domain.Specification;
 
 import com.ead.course.models.CourseModel;
-import com.ead.course.models.CourseUserModel;
 import com.ead.course.models.LessonModel;
 import com.ead.course.models.ModuleModel;
 
@@ -98,14 +97,16 @@ public class SpecificationTemplate {
     }
 
     public static Specification<CourseModel> courseUserId(final UUID userId) {
-        return (root, query, cb) -> {
-            if (query == null) {
-                return cb.conjunction();
-            }
+        // return (root, query, cb) -> {
+        // if (query == null) {
+        // return cb.conjunction();
+        // }
 
-            query.distinct(true);
-            Join<CourseModel, CourseUserModel> courseJoin = root.join("coursesUsers");
-            return cb.equal(courseJoin.get("userId"), userId);
-        };
+        // query.distinct(true);
+        // Join<CourseModel, CourseUserModel> courseJoin = root.join("coursesUsers");
+        // return cb.equal(courseJoin.get("userId"), userId);
+        // };
+
+        return null; // refatorar
     }
 }
