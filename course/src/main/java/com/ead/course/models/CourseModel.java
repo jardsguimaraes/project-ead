@@ -24,6 +24,9 @@ import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.JoinTable;
+import jakarta.persistence.ManyToMany;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
@@ -83,4 +86,13 @@ public class CourseModel extends RepresentationModel<CourseModel> implements Ser
     // JPA(menor controle)
     @Fetch(FetchMode.SUBSELECT)
     Set<ModuleModel> modules;
+
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(
+        name = "TB_COURSES_USERS",
+        joinColumns = @JoinColumn(name = "course_id"),
+        inverseJoinColumns = @JoinColumn(name = "user_id")
+    )
+    private Set<UserModel> users;
 }

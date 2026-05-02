@@ -16,7 +16,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.ead.course.dots.SubscriptionRecordDto;
+import com.ead.course.especifications.SpecificationTemplate;
 import com.ead.course.services.CourseService;
+import com.ead.course.services.UserService;
 
 import jakarta.validation.Valid;
 import lombok.extern.log4j.Log4j2;
@@ -26,18 +28,22 @@ import lombok.extern.log4j.Log4j2;
 @RequestMapping("/courses")
 public class CourseUserController {
 
-    final CourseService courseService;
+    private final CourseService courseService;
+    private final UserService userService;
 
-    public CourseUserController(CourseService courseService) {
+    public CourseUserController(CourseService courseService, UserService userService) {
         this.courseService = courseService;
+        this.userService = userService;
     }
 
     @GetMapping("/{courseId}/users")
     public ResponseEntity<Object> getAllUsersByCourse(
+            SpecificationTemplate.UserSpec spec,
             @PageableDefault(sort = "userId", direction = Sort.Direction.ASC) Pageable pageable,
             @PathVariable(name = "courseId") UUID courseId) {
         courseService.findById(courseId);
-        return ResponseEntity.status(HttpStatus.OK).body(" "); // refatorar
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(userService.findAll(SpecificationTemplate.userCourseId(courseId).and(spec), pageable));
     }
 
     @Transactional
