@@ -13,16 +13,24 @@ import jakarta.persistence.FetchType;
 import jakarta.persistence.Id;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.Table;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @Entity
 @Table(name = "TB_USERS")
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
 public class UserModel implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
     @Id
-    private UUID id;
+    private UUID userId;
 
     @Column(nullable = false, unique = true, length = 50)
     private String email;

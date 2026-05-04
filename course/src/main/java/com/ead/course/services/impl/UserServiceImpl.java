@@ -25,4 +25,10 @@ public class UserServiceImpl implements UserService {
         Objects.requireNonNull(pageable, "pageable cannot be null");
         return userRepository.findAll(spec, pageable);
     }
+
+    @Override
+    public UserModel save(UserModel userModel) {
+        Objects.requireNonNull(userModel, "User model cannot be null");
+        return userRepository.save(userModel);
+    }
 }

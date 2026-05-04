@@ -7,6 +7,12 @@ ead:
     api:
         url:
             authuser: "http://ead-authuser-service/ead-authuser"
+    broker:
+        exchange:
+            userEventExchange: ead.userevent
+        queue:
+            userEventQueue:
+                name: ead.userevent.ms.course
 
 spring:
     application:
@@ -26,7 +32,8 @@ spring:
                 "[format_sql]": true # aspas simples resolvem o aviso
                 "[jdbc.lob.non_contextual_creation]": true
     rabbitmq:
-        addresses: "amqps://zwthbyef:xVCBtrtStznDTNx7LMqhuRUf6jCzuvhS@chameleon.lmq.cloudamqp.com/zwthbyef"            
+        addresses: "amqps://zwthbyef:xVCBtrtStznDTNx7LMqhuRUf6jCzuvhS@chameleon.lmq.clo\
+            udamqp.com/zwthbyef"
     jackson:
         serialization:
             "[INDENT_OUTPUT]": true
