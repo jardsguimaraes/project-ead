@@ -19,6 +19,8 @@ spring:
             hibernate:
                 "[format_sql]": true # aspas duplas resolvem o aviso
                 "[jdbc.lob.non_contextual_creation]": true
+    rabbitmq:
+        addresses: "amqps://zwthbyef:xVCBtrtStznDTNx7LMqhuRUf6jCzuvhS@chameleon.lmq.cloudamqp.com/zwthbyef"
     jackson:
         serialization:
             "[INDENT_OUTPUT]": true
