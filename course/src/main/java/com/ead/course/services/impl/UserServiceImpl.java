@@ -1,6 +1,7 @@
 package com.ead.course.services.impl;
 
 import java.util.Objects;
+import java.util.UUID;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -30,5 +31,11 @@ public class UserServiceImpl implements UserService {
     public UserModel save(UserModel userModel) {
         Objects.requireNonNull(userModel, "User model cannot be null");
         return userRepository.save(userModel);
+    }
+
+    @Override
+    public void delete(UUID userId) {
+        Objects.requireNonNull(userId, "userId cannot be null");
+        userRepository.deleteById(userId);
     }
 }
