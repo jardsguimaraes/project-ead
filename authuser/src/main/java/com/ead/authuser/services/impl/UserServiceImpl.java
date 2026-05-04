@@ -55,6 +55,8 @@ public class UserServiceImpl implements UserService {
 
         userRepository.delete(userModel);
         log.debug("User successfully deleted {}", userModel.getUserId());
+
+        userEventPublisher.publishUserEvent(userModel.convertToUserEventDto(ActionType.DELETE));
     }
 
     @Override
@@ -70,7 +72,7 @@ public class UserServiceImpl implements UserService {
 
         userRepository.save(userModel);
         log.debug("User created successfully {}", userModel.getUserId());
-        
+
         userEventPublisher.publishUserEvent(userModel.convertToUserEventDto(ActionType.CREATE));
         log.debug("user Event Publisher successfully!");
 
@@ -93,8 +95,12 @@ public class UserServiceImpl implements UserService {
         userModel.setPhoneNumber(userRecordDto.phoneNumber());
         userModel.setLastUpdateDate(LocalDateTime.now(ZoneId.of("UTC")));
 
+        userRepository.save(userModel);
         log.debug("User updated successfully {}", userModel.getUserId());
-        return userRepository.save(userModel);
+
+        userEventPublisher.publishUserEvent(userModel.convertToUserEventDto(ActionType.UPDATE));
+
+        return userModel;
     }
 
     @Override
@@ -111,8 +117,12 @@ public class UserServiceImpl implements UserService {
         userModel.setImageUrl(userRecordDto.imageUrl());
         userModel.setLastUpdateDate(LocalDateTime.now(ZoneId.of("UTC")));
 
+        userRepository.save(userModel);
         log.debug("The image for user {} has been successfully updated.", userModel.getUserId());
-        return userRepository.save(userModel);
+
+        userEventPublisher.publishUserEvent(userModel.convertToUserEventDto(ActionType.UPDATE));
+
+        return userModel;
     }
 
     @Override
@@ -126,8 +136,12 @@ public class UserServiceImpl implements UserService {
         userModel.setUserType(UserType.INSTRUCTOR);
         userModel.setLastUpdateDate(LocalDateTime.now(ZoneId.of("UTC")));
 
+        userRepository.save(userModel);
         log.debug("Instructor successfully registered {}", userModel.getUserId());
-        return userRepository.save(userModel);
+
+        userEventPublisher.publishUserEvent(userModel.convertToUserEventDto(ActionType.UPDATE));
+
+        return userModel;
     }
 
 }
