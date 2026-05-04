@@ -13,10 +13,12 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import com.ead.authuser.dtos.UserRecordDto;
+import com.ead.authuser.enums.ActionType;
 import com.ead.authuser.enums.UserStatus;
 import com.ead.authuser.enums.UserType;
 import com.ead.authuser.exceptions.ExternalNotFoundException;
 import com.ead.authuser.models.UserModel;
+import com.ead.authuser.publishers.UserEventPublisher;
 import com.ead.authuser.repositories.UserRepository;
 import com.ead.authuser.services.UserService;
 
@@ -27,9 +29,11 @@ import lombok.extern.log4j.Log4j2;
 public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
+    private final UserEventPublisher userEventPublisher;
 
-    public UserServiceImpl(UserRepository userRepository) {
+    public UserServiceImpl(UserRepository userRepository, UserEventPublisher userEventPublisher) {
         this.userRepository = userRepository;
+        this.userEventPublisher = userEventPublisher;
     }
 
     @Override
@@ -64,8 +68,13 @@ public class UserServiceImpl implements UserService {
         userModel.setCreationDate(LocalDateTime.now(ZoneId.of("UTC")));
         userModel.setLastUpdateDate(LocalDateTime.now(ZoneId.of("UTC")));
 
+        userRepository.save(userModel);
         log.debug("User created successfully {}", userModel.getUserId());
-        return userRepository.save(userModel);
+        
+        userEventPublisher.publishUserEvent(userModel.convertToUserEventDto(ActionType.CREATE));
+        log.debug("user Event Publisher successfully!");
+
+        return userModel;
     }
 
     @Override
