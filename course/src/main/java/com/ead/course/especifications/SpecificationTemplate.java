@@ -93,7 +93,7 @@ public class SpecificationTemplate {
             }
 
             query.distinct(true);
-            Join<ModuleModel, CourseModel> courseJoin = root.join("course");
+            Join<ModuleModel, CourseModel> courseJoin = root.join("courses");
             return cb.equal(courseJoin.get("courseId"), courseId);
         };
     }

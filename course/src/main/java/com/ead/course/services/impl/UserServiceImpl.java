@@ -8,6 +8,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
+import com.ead.course.exceptions.ExternalNotFoundException;
 import com.ead.course.models.UserModel;
 import com.ead.course.repositories.UserRepository;
 import com.ead.course.services.UserService;
@@ -37,5 +38,12 @@ public class UserServiceImpl implements UserService {
     public void delete(UUID userId) {
         Objects.requireNonNull(userId, "userId cannot be null");
         userRepository.deleteById(userId);
+    }
+
+    @Override
+    public UserModel findById(UUID userId) {
+        Objects.requireNonNull(userId, "userId cannot be null");
+        return userRepository.findById(userId)
+                .orElseThrow(() -> new ExternalNotFoundException("Error: User not found!"));
     }
 }

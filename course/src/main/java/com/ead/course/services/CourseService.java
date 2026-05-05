@@ -8,6 +8,7 @@ import org.springframework.data.jpa.domain.Specification;
 
 import com.ead.course.dots.CourseRecordDto;
 import com.ead.course.models.CourseModel;
+import com.ead.course.models.UserModel;
 
 public interface CourseService {
 
@@ -22,4 +23,8 @@ public interface CourseService {
     CourseModel findById(UUID courseId);
 
     CourseModel update(CourseRecordDto courseRecordDto, CourseModel courseModel);
+
+    boolean existsByCourseAndUser(UUID courseId, UUID userId);
+
+    void saveSubscriptionUserInCourse(CourseModel courseModel, UserModel userModel);
 }

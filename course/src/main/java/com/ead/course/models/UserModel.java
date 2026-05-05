@@ -49,5 +49,5 @@ public class UserModel implements Serializable {
 
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     @ManyToMany(mappedBy = "users", fetch = FetchType.LAZY)
-    private Set<CourseModel> course;
+    private Set<CourseModel> courses;
 }
