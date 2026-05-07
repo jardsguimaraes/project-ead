@@ -53,9 +53,11 @@ public class CourseServiceImpl implements CourseService {
             moduleRepository.deleteAll(moduleModelList);
         }
 
+        courseRepository.deleteCourseUserByCourse(courseModel.getCourseId());
         courseRepository.delete(courseModel);
     }
 
+    @Transactional
     @Override
     public CourseModel save(CourseRecordDto courseRecordDto) {
         Objects.requireNonNull(courseRecordDto, "courseRecordDto cannot be null");
@@ -86,6 +88,7 @@ public class CourseServiceImpl implements CourseService {
                 .orElseThrow(() -> new ExternalNotFoundException("Error: Course Not found!"));
     }
 
+    @Transactional
     @Override
     public CourseModel update(CourseRecordDto courseRecordDto, CourseModel courseModel) {
         Objects.requireNonNull(courseRecordDto, "courseRecordDto cannot be null");
