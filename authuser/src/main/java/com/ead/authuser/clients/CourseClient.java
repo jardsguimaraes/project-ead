@@ -49,17 +49,17 @@ public class CourseClient {
             log.debug("Successful microservice Course response: {}", responsePageDto);
             return responsePageDto;
         } catch (HttpClientErrorException | HttpServerErrorException e) {
-            log.error("Error Request DELTE RestClient with couse: ", e.getMessage());
+            log.error("Error Request RestClient with couse: ", e.getMessage());
             throw new ExternalRestClientException(e.getStatusCode(),
-                    "Error Request DELTE RestClient with couse: " + e.getResponseBodyAsString(),
+                    "Error Request RestClient with couse: " + e.getResponseBodyAsString(),
                     "Course", e);
         } catch (ResourceAccessException e) {
-            log.error("Error Request DELTE RestClient with couse: ", e.getMessage());
+            log.error("Error Request RestClient with couse: ", e.getMessage());
             throw new ExternalRestClientException(HttpStatus.SERVICE_UNAVAILABLE,
-                    "Error Request DELTE RestClient with couse", "Course", e);
+                    "Error Request RestClient with couse", "Course", e);
         } catch (RestClientException e) {
-            log.error("Error Request DELTE RestClient with couse: ", e.getMessage());
-            throw new ExternalRestClientException(HttpStatus.BAD_GATEWAY, "Error Request DELTE RestClient with couse",
+            log.error("Error Request RestClient with couse: ", e.getMessage());
+            throw new ExternalRestClientException(HttpStatus.BAD_GATEWAY, "Error Request RestClient with couse",
                     "Course", e);
         }
     }
