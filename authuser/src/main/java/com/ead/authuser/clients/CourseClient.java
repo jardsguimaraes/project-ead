@@ -21,7 +21,7 @@ import com.ead.authuser.dtos.CourseRecordDto;
 import com.ead.authuser.dtos.ResponsePageDto;
 import com.ead.authuser.exceptions.ExternalRestClientException;
 
-import io.github.resilience4j.retry.annotation.Retry;
+import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
 import lombok.extern.log4j.Log4j2;
 
 @Log4j2
@@ -37,7 +37,11 @@ public class CourseClient {
         this.restClient = restClientBuilder.build();
     }
 
-    // @Retry(name = "retryInstance", fallbackMethod = "retryFallback") - Anotação utilizada quando se deseja a abordagem do Retry
+    // Anotação utilizada quando se deseja a abordagem do Retry com Fallback
+    // @Retry(name = "retryInstance", fallbackMethod = "retryFallback")
+    // Anotação utilizada quando se deseja a abordagem do CircuitBreaker com Fallback
+    // @CircuitBreaker(name = "circuitbreakerInstance", fallbackMethod = "circuitbreakerFallback")
+    @CircuitBreaker(name = "circuitbreakerInstance")
     public Page<CourseRecordDto> getAllCourseByUser(UUID userId, Pageable pageable) {
         var url = baseUrlCourse + "/courses?userId=" + userId +
                 "&page=" + pageable.getPageNumber() +
@@ -69,13 +73,24 @@ public class CourseClient {
         }
     }
 
-    /*
-        Metodoutilizado para tratar o error após as tentativas mau sucedidas do retry
-    */
-    // public Page<CourseRecordDto> retryFallback(UUID userId, Pageable pageable, Throwable throwable) {
-    //     log.error("Inside retry retryFullback, couse - {}", throwable.toString());
+    // *************************************************************************************
+    // Metodos retryFallback e circuitbreakerFallback são utilizado para tratar o
+    // error após as tentativas mau sucedidas do retry
 
-    //     List<CourseRecordDto> searchResult = new ArrayList<>();
-    //     return new PageImpl<>(searchResult);
-    // }
+    public Page<CourseRecordDto> retryFallback(UUID userId, Pageable pageable,
+            Throwable throwable) {
+        log.error("Inside retry retryFallback, couse - {}", throwable.toString());
+
+        List<CourseRecordDto> searchResult = new ArrayList<>();
+        return new PageImpl<>(searchResult);
+    }
+
+    public Page<CourseRecordDto> circuitbreakerFallback(UUID userId, Pageable pageable, Throwable throwable) {
+        log.error("Inside circuit break Fallback, couse - {}", throwable.toString());
+
+        List<CourseRecordDto> searchResult = new ArrayList<>();
+        return new PageImpl<>(searchResult);
+    }
+
+    //*****************************************************************************************
 }
