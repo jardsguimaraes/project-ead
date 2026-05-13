@@ -1,35 +1,46 @@
 package com.ead.authuser.configs;
 
-import java.net.http.HttpClient;
-import java.time.Duration;
-
+import org.apache.hc.client5.http.config.RequestConfig;
+import org.apache.hc.client5.http.impl.classic.CloseableHttpClient;
+import org.apache.hc.client5.http.impl.classic.HttpClients;
+import org.apache.hc.core5.util.Timeout;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cloud.client.loadbalancer.LoadBalanced;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.http.client.JdkClientHttpRequestFactory;
+import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
 import org.springframework.web.client.RestClient;
 
+@SuppressWarnings("null")
 @Configuration
 public class RestClientConfig {
 
-    private static final int TIMEOUT = 5000;
+    @Value("${http.client.timeout}")
+    private int timeoutMillis;
 
-    @SuppressWarnings("null")
     @LoadBalanced
     @Bean
     public RestClient.Builder restClientBuilder() {
         return RestClient.builder().requestFactory(customRequestFactory());
     }
 
-    @SuppressWarnings("null")
-    private JdkClientHttpRequestFactory customRequestFactory() {
-        var httpClient = HttpClient.newBuilder()
-                .connectTimeout(Duration.ofMillis(TIMEOUT))
+    private HttpComponentsClientHttpRequestFactory customRequestFactory() {
+
+        var requestConfig = RequestConfig.custom()
+                .setConnectionRequestTimeout(Timeout.ofMilliseconds(timeoutMillis))
+                .setResponseTimeout(Timeout.ofMilliseconds(timeoutMillis))
                 .build();
 
-        var requestFactory = new JdkClientHttpRequestFactory(httpClient);
-        requestFactory.setReadTimeout(Duration.ofMillis(TIMEOUT));
+        CloseableHttpClient client = HttpClients.custom()
+                .setDefaultRequestConfig(requestConfig)
+                .build();
 
-        return requestFactory;
+        var factory = new HttpComponentsClientHttpRequestFactory(client);
+
+        // apesar de deprecated, ainda é o fallback necessário
+        // para versões atuais do HttpClient sem ConnectionConfig
+        factory.setConnectTimeout(timeoutMillis);
+
+        return factory;
     }
 }

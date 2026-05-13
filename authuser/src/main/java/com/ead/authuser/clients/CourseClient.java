@@ -1,10 +1,13 @@
 package com.ead.authuser.clients;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
@@ -18,6 +21,7 @@ import com.ead.authuser.dtos.CourseRecordDto;
 import com.ead.authuser.dtos.ResponsePageDto;
 import com.ead.authuser.exceptions.ExternalRestClientException;
 
+import io.github.resilience4j.retry.annotation.Retry;
 import lombok.extern.log4j.Log4j2;
 
 @Log4j2
@@ -33,6 +37,7 @@ public class CourseClient {
         this.restClient = restClientBuilder.build();
     }
 
+    // @Retry(name = "retryInstance", fallbackMethod = "retryFallback") - Anotação utilizada quando se deseja a abordagem do Retry
     public Page<CourseRecordDto> getAllCourseByUser(UUID userId, Pageable pageable) {
         var url = baseUrlCourse + "/courses?userId=" + userId +
                 "&page=" + pageable.getPageNumber() +
@@ -63,4 +68,14 @@ public class CourseClient {
                     "Course", e);
         }
     }
+
+    /*
+        Metodoutilizado para tratar o error após as tentativas mau sucedidas do retry
+    */
+    // public Page<CourseRecordDto> retryFallback(UUID userId, Pageable pageable, Throwable throwable) {
+    //     log.error("Inside retry retryFullback, couse - {}", throwable.toString());
+
+    //     List<CourseRecordDto> searchResult = new ArrayList<>();
+    //     return new PageImpl<>(searchResult);
+    // }
 }

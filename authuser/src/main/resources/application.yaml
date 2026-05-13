@@ -38,14 +38,30 @@ ead:
 
 logging:
     level:
+        '[io.github.resilience4j.retry]': DEBUG
         root: INFO
         "[com.ead.authuser]": TRACE
         "[org.springframework.web]": DEBUG
         "[org.hibernate]": INFO
 
+http:
+    client:
+        timeout: 5000
 eureka:
     client:
         service-url:
             defaultZone: "http://localhost:8761/eureka/"
     instance:
         hostname: localhost
+
+resilience4j:
+    retry:
+        instances:
+            retryInstance:
+                maxAttempts: 3
+                wait-duration: 5s
+                retry-exceptions:
+                    - org.springframework.web.client.ResourceAccessException
+                    - com.ead.authuser.exceptions.ExternalRestClientException
+                ignore-exceptions:
+                    - org.springframework.web.client.HttpClientErrorException
