@@ -19,6 +19,10 @@
 		{
 			"name": "api-gateway",
 			"path": "api-gateway"
+		},
+		{
+			"name": "config-server",
+			"path": "config-server"
 		}
 	],
 	"settings": {}

@@ -1,0 +1,23 @@
+server:
+    port: 8888
+
+spring:
+    application:
+        name: ead-config-server
+    cloud:
+        config:
+            server:
+                git:
+                    uri: "https://github.com/jardsguimaraes/project-ead/ead-config-server-repo"
+                    # Usuário e senha devem ser passados para repositórios privados
+                    # A senha deve deve gerada através de token no github em settings/develop settings
+                    # não esquecer de selecionar a flag repo na gerção do token
+                    # username: jardsguimaraes
+                    # password: *************
+
+eureka:
+    client:
+        service-url:
+            defaultZone: "http://localhost:8761/eureka"
+    instance:
+        hostname: localhost
