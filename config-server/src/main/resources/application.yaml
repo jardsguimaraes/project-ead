@@ -8,7 +8,7 @@ spring:
         config:
             server:
                 git:
-                    uri: "https://github.com/jardsguimaraes/project-ead/ead-config-server-repo"
+                    uri: "https://github.com/jardsguimaraes/project-ead/tree/main/ead-config-server-repo"
                     # Usuário e senha devem ser passados para repositórios privados
                     # A senha deve deve gerada através de token no github em settings/develop settings
                     # não esquecer de selecionar a flag repo na gerção do token
