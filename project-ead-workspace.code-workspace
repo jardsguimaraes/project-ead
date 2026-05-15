@@ -23,6 +23,9 @@
 		{
 			"name": "config-server",
 			"path": "config-server"
+		},
+		{
+			"path": "../ead-config-server-repo"
 		}
 	],
 	"settings": {}
