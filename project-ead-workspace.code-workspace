@@ -1,15 +1,19 @@
 {
 	"folders": [
 		{
+			"name": "authuser",
 			"path": "authuser"
 		},
 		{
+			"name": "course",
 			"path": "course"
 		},
 		{
+			"name": "notification",
 			"path": "notification"
 		},
 		{
+			"name": "payment",
 			"path": "payment"
 		},
 		{
@@ -17,8 +21,16 @@
 			"path": "service-registry"
 		},
 		{
+			"name": "config-server",
+			"path": "config-server"
+		},
+		{
 			"name": "api-gateway",
 			"path": "api-gateway"
+		},
+		{
+			"name": "ead-config-server-repo",
+			"path": "../ead-config-server-repo"
 		}
 	],
 	"settings": {}

@@ -1,76 +1,12 @@
-server:
-    port: 8087
-    servlet:
-        context-path: "/ead-authuser/"
-
 spring:
     application:
         name: ead-authuser-service
-    datasource:
-        url: jdbc:postgresql://localhost:5432/ead_authuser_v2
-        username: postgres
-        password: adm10092007
-        driver-class-name: org.postgresql.Driver
-    jpa:
-        hibernate:
-            ddl-auto: update
-        show-sql: true
-        properties:
-            hibernate:
-                "[format_sql]": true # aspas duplas resolvem o aviso
-                "[jdbc.lob.non_contextual_creation]": true
-    rabbitmq:
-        addresses: "amqps://zwthbyef:xVCBtrtStznDTNx7LMqhuRUf6jCzuvhS@chameleon.lmq.cloudamqp.com/zwthbyef"
-    jackson:
-        serialization:
-            "[INDENT_OUTPUT]": true
-    # output:   --Configuração para colorir os logs no console no Windows
-    #     ansi:
-    #         enabled: ALWAYS
-
-ead:
-    api:
-        url:
-            course: "http://ead-course-service/ead-course"
-    broker:
-        exchange:
-            userEvent: ead.userevent
-
-logging:
-    level:
-        '[io.github.resilience4j.retry]': DEBUG
-        root: INFO
-        "[com.ead.authuser]": TRACE
-        "[org.springframework.web]": DEBUG
-        "[org.hibernate]": INFO
-
-http:
-    client:
-        timeout: 5000
-eureka:
-    client:
-        service-url:
-            defaultZone: "http://localhost:8761/eureka/"
-    instance:
-        hostname: localhost
-
-resilience4j:
-    circuitbreaker:
-        instances:
-            circuitbreakerInstance:
-                sliding-window-size: 30
-                permitted-number-of-calls-in-half-open-state: 2
-                sliding-window-type: TIME_BASED
-                minimum-number-of-calls: 2
-                wait-duration-in-open-state: 15s
-                failure-rate-threshold: 80
-    retry:
-        instances:
-            retryInstance:
-                maxAttempts: 3
-                wait-duration: 5s
-                retry-exceptions:
-                    - org.springframework.web.client.ResourceAccessException
-                    - com.ead.authuser.exceptions.ExternalRestClientException
-                ignore-exceptions:
-                    - org.springframework.web.client.HttpClientErrorException
+    config:
+        import: "configserver:"
+        #optional: caso queira utilizar uma rota alternativa em caso de falha
+        #com o config-server, as configurações devem estar neste yaml
+        # import: "optional:configserver:"
+    cloud:
+        config:
+            discovery:
+                service-id: ead-config-server
