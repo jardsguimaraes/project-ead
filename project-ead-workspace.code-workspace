@@ -22,6 +22,7 @@
 		},
 		{
 <<<<<<< HEAD
+<<<<<<< HEAD
 			"name": "config-server",
 			"path": "config-server"
 		},
@@ -43,6 +44,8 @@
 >>>>>>> Course
 =======
 >>>>>>> Notification
+=======
+>>>>>>> Payment
 			"path": "../ead-config-server-repo"
 		}
 	],
