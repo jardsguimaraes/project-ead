@@ -29,7 +29,14 @@
 			"path": "api-gateway"
 		},
 		{
+<<<<<<< HEAD
 			"name": "ead-config-server-repo",
+=======
+			"name": "config-server",
+			"path": "config-server"
+		},
+		{
+>>>>>>> Config-Server
 			"path": "../ead-config-server-repo"
 		}
 	],
