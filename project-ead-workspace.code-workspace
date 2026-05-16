@@ -21,6 +21,7 @@
 			"path": "service-registry"
 		},
 		{
+<<<<<<< HEAD
 			"name": "config-server",
 			"path": "config-server"
 		},
@@ -40,6 +41,8 @@
 >>>>>>> Config-Server
 =======
 >>>>>>> Course
+=======
+>>>>>>> Notification
 			"path": "../ead-config-server-repo"
 		}
 	],

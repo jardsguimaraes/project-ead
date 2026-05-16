@@ -1,13 +1,12 @@
-server:
-    port: 8084
-
 spring:
     application:
         name: ead-notification-service
-
-eureka:
-    client:
-        service-url:
-            defaultZone: "http://localhost:8761/eureka/"
-    instance:
-        hostname: localhost
+    config:
+        import: "configserver:"
+        #optional: caso queira utilizar uma rota alternativa em caso de falha
+        #com o config-server, as configurações devem estar neste yaml
+        # import: "optional:configserver:"
+    cloud:
+        config:
+            discovery:
+                service-id: ead-config-server
