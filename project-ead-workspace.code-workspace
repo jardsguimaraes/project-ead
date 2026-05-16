@@ -30,6 +30,7 @@
 		},
 		{
 <<<<<<< HEAD
+<<<<<<< HEAD
 			"name": "ead-config-server-repo",
 =======
 			"name": "config-server",
@@ -37,6 +38,8 @@
 		},
 		{
 >>>>>>> Config-Server
+=======
+>>>>>>> Course
 			"path": "../ead-config-server-repo"
 		}
 	],
