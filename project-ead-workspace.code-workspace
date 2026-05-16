@@ -19,6 +19,9 @@
 		{
 			"name": "api-gateway",
 			"path": "api-gateway"
+		},
+		{
+			"path": "../ead-config-server-repo"
 		}
 	],
 	"settings": {}
