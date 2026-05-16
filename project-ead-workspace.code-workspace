@@ -33,6 +33,7 @@
 		{
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 			"name": "ead-config-server-repo",
 =======
 			"name": "config-server",
@@ -46,6 +47,8 @@
 >>>>>>> Notification
 =======
 >>>>>>> Payment
+=======
+>>>>>>> Api-Gateway
 			"path": "../ead-config-server-repo"
 		}
 	],

@@ -4,24 +4,12 @@ server:
 spring:
     application:
         name: ead-api-gateway
+    config:
+        import: "configserver:"
+        #optional: caso queira utilizar uma rota alternativa em caso de falha
+        #com o config-server, as configurações devem estar neste yaml
+        # import: "optional:configserver:"
     cloud:
-        gateway:
-            server:
-                webmvc:
-                    routes:
-                        - id: authuser-service
-                          uri: lb://EAD-AUTHUSER-SERVICE
-                          predicates:
-                              - Path=/ead-authuser/**
-
-                        - id: course-service
-                          uri: lb://EAD-COURSE-SERVICE
-                          predicates:
-                              - Path=/ead-course/**
-
-eureka:
-    client:
-        service-url:
-            defaultZone: "http://localhost:8761/eureka/"
-    instance:
-        hostname: localhost
+        config:
+            discovery:
+                service-id: ead-config-server
