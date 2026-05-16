@@ -15,6 +15,9 @@
 		{
 			"name": "service-registry",
 			"path": "service-registry"
+		},
+		{
+			"path": "../ead-config-server-repo"
 		}
 	],
 	"settings": {}
