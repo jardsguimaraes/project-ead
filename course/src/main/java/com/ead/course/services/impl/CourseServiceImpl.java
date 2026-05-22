@@ -14,28 +14,35 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.ead.course.dots.CourseRecordDto;
+import com.ead.course.dots.NotificationRecordCommandDto;
 import com.ead.course.exceptions.ExternalNotFoundException;
 import com.ead.course.models.CourseModel;
 import com.ead.course.models.LessonModel;
 import com.ead.course.models.ModuleModel;
 import com.ead.course.models.UserModel;
+import com.ead.course.publisher.NotificationCommandPublisher;
 import com.ead.course.repositories.CourseRepository;
 import com.ead.course.repositories.LessonRepository;
 import com.ead.course.repositories.ModuleRepository;
 import com.ead.course.services.CourseService;
 
+import lombok.extern.log4j.Log4j2;
+
+@Log4j2
 @Service
 public class CourseServiceImpl implements CourseService {
 
+    private final NotificationCommandPublisher notificationCommandPublisher;
     private final CourseRepository courseRepository;
     private final ModuleRepository moduleRepository;
     private final LessonRepository lessonRepository;
 
     public CourseServiceImpl(CourseRepository courseRepository, LessonRepository lessonRepository,
-            ModuleRepository moduleRepository) {
+            ModuleRepository moduleRepository, NotificationCommandPublisher notificationCommandPublisher) {
         this.courseRepository = courseRepository;
         this.moduleRepository = moduleRepository;
         this.lessonRepository = lessonRepository;
+        this.notificationCommandPublisher = notificationCommandPublisher;
     }
 
     @Transactional
@@ -106,5 +113,15 @@ public class CourseServiceImpl implements CourseService {
     @Override
     public void saveSubscriptionUserInCourse(CourseModel courseModel, UserModel userModel) {
         courseRepository.saveCourseUser(courseModel.getCourseId(), userModel.getUserId());
+
+        try {
+            var notificationRecordCommandDto = new NotificationRecordCommandDto(
+                    "Bem-vindo(a) ao curso: " + courseModel.getName(),
+                    userModel.getFullName() + " a sua inscrição foi realizada com sucesso!",
+                    userModel.getUserId());
+            notificationCommandPublisher.publishNotificationCommand(notificationRecordCommandDto);
+        } catch (Exception e) {
+            log.error("Error sending notification!");
+        }
     }
 }
