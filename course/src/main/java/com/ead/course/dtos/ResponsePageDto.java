@@ -1,11 +1,11 @@
-package com.ead.course.dots;
+package com.ead.course.dtos;
 
 import java.util.List;
 
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 
-import com.ead.course.dots.metada.PageMetadata;
+import com.ead.course.dtos.metada.PageMetadata;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;

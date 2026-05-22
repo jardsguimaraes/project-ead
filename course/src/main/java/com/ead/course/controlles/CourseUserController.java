@@ -17,8 +17,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.ead.course.dots.SubscriptionRecordDto;
-import com.ead.course.dots.SubscriptionValidationRecordDto;
+import com.ead.course.dtos.SubscriptionRecordDto;
+import com.ead.course.dtos.SubscriptionValidationRecordDto;
 import com.ead.course.especifications.SpecificationTemplate;
 import com.ead.course.services.CourseService;
 import com.ead.course.services.UserService;

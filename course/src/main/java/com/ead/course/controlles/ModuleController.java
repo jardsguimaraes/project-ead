@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.ead.course.dots.ModuleRecordDto;
+import com.ead.course.dtos.ModuleRecordDto;
 import com.ead.course.especifications.SpecificationTemplate;
 import com.ead.course.models.ModuleModel;
 import com.ead.course.services.CourseService;

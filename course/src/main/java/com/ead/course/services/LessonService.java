@@ -6,7 +6,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 
-import com.ead.course.dots.LessonRecordDto;
+import com.ead.course.dtos.LessonRecordDto;
 import com.ead.course.models.LessonModel;
 import com.ead.course.models.ModuleModel;
 

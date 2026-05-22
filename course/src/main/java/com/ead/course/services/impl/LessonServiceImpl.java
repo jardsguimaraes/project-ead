@@ -11,7 +11,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
-import com.ead.course.dots.LessonRecordDto;
+import com.ead.course.dtos.LessonRecordDto;
 import com.ead.course.exceptions.ExternalNotFoundException;
 import com.ead.course.models.LessonModel;
 import com.ead.course.models.ModuleModel;
