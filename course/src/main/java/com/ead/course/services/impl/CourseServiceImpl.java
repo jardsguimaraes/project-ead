@@ -13,8 +13,8 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.ead.course.dots.CourseRecordDto;
-import com.ead.course.dots.NotificationRecordCommandDto;
+import com.ead.course.dtos.CourseRecordDto;
+import com.ead.course.dtos.NotificationRecordCommandDto;
 import com.ead.course.exceptions.ExternalNotFoundException;
 import com.ead.course.models.CourseModel;
 import com.ead.course.models.LessonModel;

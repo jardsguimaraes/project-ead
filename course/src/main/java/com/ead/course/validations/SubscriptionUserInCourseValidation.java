@@ -7,7 +7,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.validation.Errors;
 import org.springframework.validation.Validator;
 
-import com.ead.course.dots.SubscriptionValidationRecordDto;
+import com.ead.course.dtos.SubscriptionValidationRecordDto;
 import com.ead.course.enums.UserStatus;
 import com.ead.course.services.CourseService;
 

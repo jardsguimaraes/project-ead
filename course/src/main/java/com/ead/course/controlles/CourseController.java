@@ -21,7 +21,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.ead.course.dots.CourseRecordDto;
+import com.ead.course.dtos.CourseRecordDto;
 import com.ead.course.especifications.SpecificationTemplate;
 import com.ead.course.models.CourseModel;
 import com.ead.course.services.CourseService;

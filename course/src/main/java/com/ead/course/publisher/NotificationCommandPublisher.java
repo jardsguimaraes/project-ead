@@ -4,7 +4,7 @@ import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
-import com.ead.course.dots.NotificationRecordCommandDto;
+import com.ead.course.dtos.NotificationRecordCommandDto;
 
 @Component
 public class NotificationCommandPublisher {
