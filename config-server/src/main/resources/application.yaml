@@ -13,6 +13,9 @@ spring:
                     password: ${GIT_TOKEN}
 
 ead:
+    configServer:
+        username: "${CONFIG_SERVER_USERNAME}"
+        password: "${CONFIG_SERVER_PASSWORD}"
     serviceRegistry:
         username: "${SERVICE_REGISTRY_USERNAME}"
         password: "${SERVICE_REGISTRY_PASSWORD}"
