@@ -1,11 +1,12 @@
 package com.ead.authuser.models;
 
+import java.io.Serializable;
 import java.util.UUID;
 
-import org.springframework.data.annotation.Id;
 import org.springframework.security.core.GrantedAuthority;
 
 import com.ead.authuser.enums.RoleType;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -13,6 +14,7 @@ import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -38,6 +40,7 @@ public class RoleModel implements GrantedAuthority {
     private RoleType roleName;
 
     @Override
+    @JsonIgnore
     public String getAuthority() {
         return this.roleName.toString();
     }

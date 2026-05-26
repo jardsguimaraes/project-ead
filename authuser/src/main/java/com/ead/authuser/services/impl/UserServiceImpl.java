@@ -10,16 +10,19 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.ead.authuser.dtos.UserRecordDto;
 import com.ead.authuser.enums.ActionType;
+import com.ead.authuser.enums.RoleType;
 import com.ead.authuser.enums.UserStatus;
 import com.ead.authuser.enums.UserType;
 import com.ead.authuser.exceptions.ExternalNotFoundException;
 import com.ead.authuser.models.UserModel;
 import com.ead.authuser.publishers.UserEventPublisher;
 import com.ead.authuser.repositories.UserRepository;
+import com.ead.authuser.services.RoleService;
 import com.ead.authuser.services.UserService;
 
 import lombok.extern.log4j.Log4j2;
@@ -30,10 +33,15 @@ public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
     private final UserEventPublisher userEventPublisher;
+    private final RoleService roleService;
+    private final PasswordEncoder passwordEncoder;
 
-    public UserServiceImpl(UserRepository userRepository, UserEventPublisher userEventPublisher) {
+    public UserServiceImpl(UserRepository userRepository, UserEventPublisher userEventPublisher,
+            RoleService roleService, PasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
         this.userEventPublisher = userEventPublisher;
+        this.roleService = roleService;
+        this.passwordEncoder = passwordEncoder;
     }
 
     @Override
@@ -69,6 +77,8 @@ public class UserServiceImpl implements UserService {
         userModel.setUserType(UserType.USER);
         userModel.setCreationDate(LocalDateTime.now(ZoneId.of("UTC")));
         userModel.setLastUpdateDate(LocalDateTime.now(ZoneId.of("UTC")));
+        userModel.setPassword(passwordEncoder.encode(userModel.getPassword()));
+        userModel.getRoles().add(roleService.findByRoleName(RoleType.ROLE_USER));
 
         userRepository.save(userModel);
         log.debug("User created successfully {}", userModel.getUserId());
