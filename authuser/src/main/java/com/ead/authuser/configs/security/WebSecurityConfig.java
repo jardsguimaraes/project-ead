@@ -21,17 +21,17 @@ import jakarta.servlet.DispatcherType;
 @EnableWebSecurity
 public class WebSecurityConfig {
 
-    private final authenticationEntryPointImpl authenticationEntryPointImpl;
+    private final AuthenticationEntryPointImpl authenticationEntryPointImpl;
     private final UserDetailsServiceImpl detailsServiceImpl;
 
     private static final String[] AUTH_WHITELIST = {
             "/auth/**"
     };
 
-    public WebSecurityConfig(UserDetailsServiceImpl detailsServiceImpl,
-            authenticationEntryPointImpl authenticationEntryPointImpl) {
-        this.detailsServiceImpl = detailsServiceImpl;
+    public WebSecurityConfig(AuthenticationEntryPointImpl authenticationEntryPointImpl,
+            UserDetailsServiceImpl detailsServiceImpl) {
         this.authenticationEntryPointImpl = authenticationEntryPointImpl;
+        this.detailsServiceImpl = detailsServiceImpl;
     }
 
     @Bean
