@@ -45,7 +45,6 @@ public class WebSecurityConfig {
                 .anyRequest()
                 .authenticated())
                 .httpBasic(basic -> basic.authenticationEntryPoint(authenticationEntryPointImpl))
-                .formLogin(Customizer.withDefaults())
                 .csrf(AbstractHttpConfigurer::disable);
 
         return http.build();
