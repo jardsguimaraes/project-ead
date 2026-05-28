@@ -1,0 +1,22 @@
+info:
+  name: UPDATE USER
+  type: http
+  seq: 1
+
+http:
+  method: PUT
+  url: "{{localhost-gateway}}/ead-authuser/users/f1b376c4-8462-420d-8195-79b59ebb7641"
+  body:
+    type: json
+    data: |-
+      {
+        "fullName": "Sam Wilson atualizado",
+        "phoneNumber": "82999999999"
+      }
+  auth: inherit
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5

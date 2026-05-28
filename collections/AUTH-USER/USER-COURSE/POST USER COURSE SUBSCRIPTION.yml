@@ -1,0 +1,28 @@
+info:
+  name: POST USER COURSE SUBSCRIPTION
+  type: http
+  seq: 1
+
+http:
+  method: POST
+  url: "{{localhost-gateway}}/ead-course/courses/57f49199-6986-4168-8223-1b5baee80311/courses/subscription?size=1&page=0"
+  params:
+    - name: size
+      value: "1"
+      type: query
+    - name: page
+      value: "0"
+      type: query
+  body:
+    type: json
+    data: |-
+      {
+          "courseId": "0a1fcdb2-603d-4054-ba78-cec6d7e84c65"
+      }
+  auth: inherit
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5

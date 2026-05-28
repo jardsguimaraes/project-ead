@@ -1,0 +1,15 @@
+info:
+  name: TESTE
+  type: http
+  seq: 1
+
+http:
+  method: GET
+  url: "{{localhost-gateway}}/ead-authuser/users/358f9589-afe4-46c8-ac43-253242d9d31c"
+  auth: inherit
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5

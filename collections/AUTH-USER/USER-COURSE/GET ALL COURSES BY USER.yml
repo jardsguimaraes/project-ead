@@ -1,0 +1,22 @@
+info:
+  name: GET ALL COURSES BY USER
+  type: http
+  seq: 1
+
+http:
+  method: GET
+  url: "{{localhost-gateway}}/ead-authuser/users/ce8c64a7-bbd9-4cb0-a036-f5211cb578ed/courses?size=1&page=0"
+  params:
+    - name: size
+      value: "1"
+      type: query
+    - name: page
+      value: "0"
+      type: query
+  auth: inherit
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5

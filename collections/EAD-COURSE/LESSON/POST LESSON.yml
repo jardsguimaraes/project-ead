@@ -1,0 +1,23 @@
+info:
+  name: POST LESSON
+  type: http
+  seq: 1
+
+http:
+  method: POST
+  url: "{{localhost-gateway}}/ead-course/modules/30c9db7e-7306-46b5-88b7-e90f832c878a/lessons"
+  body:
+    type: json
+    data: |-
+      {
+        "title": "Trabalhando com Lombok",
+        "description": "Criando métodos gets e sets update",
+        "videoUrl": "www.youtu.br/kiydfjghlgsj=98_vzcvcn_dlvlvn_4"
+      }
+  auth: inherit
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5

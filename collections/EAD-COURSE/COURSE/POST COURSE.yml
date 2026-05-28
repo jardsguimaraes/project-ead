@@ -1,0 +1,26 @@
+info:
+  name: POST COURSE
+  type: http
+  seq: 1
+
+http:
+  method: POST
+  url: "{{localhost-gateway}}/ead-course/courses"
+  body:
+    type: json
+    data: |-
+      {
+        "name": "X-MEN SCHOOL",
+        "description": "Aprenda a desenvolver seus super poderes",
+        "userInstructor": "7dceb98c-75f7-4869-91c9-ef7abcbdc559",
+        "courseStatus": "CONCLUDED",
+        "courseLevel": "BEGINNER",
+        "imageUrl": "www.jardsguimaraes/image/06"
+      }
+  auth: inherit
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5

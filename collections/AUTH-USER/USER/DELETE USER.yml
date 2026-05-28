@@ -1,0 +1,15 @@
+info:
+  name: DELETE USER
+  type: http
+  seq: 1
+
+http:
+  method: DELETE
+  url: "{{localhost-gateway}}/ead-authuser/users/77b6b912-db05-44a7-b978-ba9061563a32"
+  auth: inherit
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5

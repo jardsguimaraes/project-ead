@@ -1,0 +1,28 @@
+info:
+  name: GET ALL MODULE
+  type: http
+  seq: 1
+
+http:
+  method: GET
+  url: "{{localhost-gateway}}/ead-course/courses/bb043588-c6d4-4fb5-8151-f475c3c2cc34/modules?sort=creationDate,DESC&title=Modulo 1&page=1&size=1"
+  params:
+    - name: sort
+      value: creationDate,DESC
+      type: query
+    - name: title
+      value: Modulo 1
+      type: query
+    - name: page
+      value: "1"
+      type: query
+    - name: size
+      value: "1"
+      type: query
+  auth: inherit
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5

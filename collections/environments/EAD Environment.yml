@@ -1,0 +1,6 @@
+name: EAD Environment
+variables:
+  - name: localhost-gateway
+    value: http://localhost:8080
+  - name: localhost-config-server
+    value: http://localhost:8888

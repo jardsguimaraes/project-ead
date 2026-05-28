@@ -1,0 +1,15 @@
+info:
+  name: "UPDATE COURSE "
+  type: http
+  seq: 1
+
+http:
+  method: PUT
+  url: "{{localhost-gateway}}/ead-course/courses/518d30ed-9e68-47fb-b1d2-a5b3593a48af"
+  auth: inherit
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5

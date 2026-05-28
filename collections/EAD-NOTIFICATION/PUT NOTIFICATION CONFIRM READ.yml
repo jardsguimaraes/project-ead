@@ -1,0 +1,21 @@
+info:
+  name: PUT NOTIFICATION CONFIRM READ
+  type: http
+  seq: 1
+
+http:
+  method: PUT
+  url: "{{localhost-gateway}}/ead-notification/users/a57453ba-e692-4b9a-9940-d896b345dd5c/notifications/c867194d-1c8d-4674-9301-f169fdcb0791"
+  body:
+    type: json
+    data: |-
+      {
+        "notificationStatus": "READ"
+      }
+  auth: inherit
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5

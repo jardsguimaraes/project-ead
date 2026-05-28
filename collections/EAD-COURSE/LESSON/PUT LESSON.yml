@@ -1,0 +1,23 @@
+info:
+  name: PUT LESSON
+  type: http
+  seq: 1
+
+http:
+  method: PUT
+  url: "{{localhost-gateway}}/ead-course/modules/96c741bb-ba6d-4cff-8bf1-a8ec9ac5f91e/lessons/3066c249-0351-40dc-aede-0f23bff9631b"
+  body:
+    type: json
+    data: |-
+      {
+        "title": "Java Lambdas UPDATE",
+        "description": "Entendendo conceitos de Lambdas com Streams UPDATE",
+        "videoUrl": "www.youtu.br/kiydfjghlgsj=98_vzcvcn_dlvlvn_33"
+      }
+  auth: inherit
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5

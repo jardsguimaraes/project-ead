@@ -1,0 +1,31 @@
+info:
+  name: GET ALL LESSON
+  type: http
+  seq: 1
+
+http:
+  method: GET
+  url: "{{localhost-gateway}}/ead-course/modules/30c9db7e-7306-46b5-88b7-e90f832c878a/lessons?title=Criando &description=update&sort=creationDate,DESC&page=2&size=1"
+  params:
+    - name: title
+      value: "Criando "
+      type: query
+    - name: description
+      value: update
+      type: query
+    - name: sort
+      value: creationDate,DESC
+      type: query
+    - name: page
+      value: "2"
+      type: query
+    - name: size
+      value: "1"
+      type: query
+  auth: inherit
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5

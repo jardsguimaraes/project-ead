@@ -1,0 +1,40 @@
+info:
+  name: GET ALL COURSE
+  type: http
+  seq: 1
+
+http:
+  method: GET
+  url: "{{localhost-gateway}}/ead-course/courses?sort=creationDate,ASC&name=JAVA&courseLevel=BEGINNER&courseStatus=&size=1&page=0&userInstructor=19360e91-d4f2-45bf-a5b0-cbb4ad4fa643&userId=c1c9a5fa-3c79-4f69-abd3-a5237ac5061a"
+  params:
+    - name: sort
+      value: creationDate,ASC
+      type: query
+    - name: name
+      value: JAVA
+      type: query
+    - name: courseLevel
+      value: BEGINNER
+      type: query
+    - name: courseStatus
+      value: ""
+      type: query
+    - name: size
+      value: "1"
+      type: query
+    - name: page
+      value: "0"
+      type: query
+    - name: userInstructor
+      value: 19360e91-d4f2-45bf-a5b0-cbb4ad4fa643
+      type: query
+    - name: userId
+      value: c1c9a5fa-3c79-4f69-abd3-a5237ac5061a
+      type: query
+  auth: inherit
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5

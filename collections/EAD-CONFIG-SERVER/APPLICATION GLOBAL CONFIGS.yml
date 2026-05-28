@@ -1,0 +1,18 @@
+info:
+  name: APPLICATION GLOBAL CONFIGS
+  type: http
+  seq: 9
+
+http:
+  method: get
+  url: "{{localhost-config-server}}/application/main"
+  auth:
+    type: basic
+    username: configserver
+    password: ead123cs
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5

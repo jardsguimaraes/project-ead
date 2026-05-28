@@ -1,0 +1,22 @@
+info:
+  name: POST MODULE
+  type: http
+  seq: 1
+
+http:
+  method: POST
+  url: "{{localhost-gateway}}/ead-course/courses/bb043588-c6d4-4fb5-8151-f475c3c2cc34/modules"
+  body:
+    type: json
+    data: |-
+      {
+        "title": "Modulo 2",
+        "description": "Hello Wold Spring-Boot"
+      }
+  auth: inherit
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5
