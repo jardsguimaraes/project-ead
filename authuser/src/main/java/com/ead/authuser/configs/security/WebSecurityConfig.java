@@ -2,7 +2,9 @@ package com.ead.authuser.configs.security;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.http.HttpMethod;
+import org.springframework.security.access.expression.method.DefaultMethodSecurityExpressionHandler;
+import org.springframework.security.access.hierarchicalroles.RoleHierarchy;
+import org.springframework.security.access.hierarchicalroles.RoleHierarchyImpl;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
@@ -41,6 +43,24 @@ public class WebSecurityConfig {
     }
 
     @Bean
+    public RoleHierarchy roleHierarchy() {
+        String hierarchy = """
+                ROLE_ADMIN > ROLE_INSTRUCTOR
+                ROLE_INSTRUCTOR > ROLE_STUDENT
+                ROLE_STUDENT > ROLE_USER
+                """;
+
+        return RoleHierarchyImpl.fromHierarchy(hierarchy);
+    }
+
+    @Bean
+    public DefaultMethodSecurityExpressionHandler expressionHandler() {
+        var expressionHandler = new DefaultMethodSecurityExpressionHandler();
+        expressionHandler.setRoleHierarchy(roleHierarchy());
+        return expressionHandler;
+    }
+
+    @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
                 .exceptionHandling((exception) -> exception
@@ -51,7 +71,7 @@ public class WebSecurityConfig {
                         .requestMatchers(AUTH_WHITELIST).permitAll()
                         // Tipos de abordagens
                         // .requestMatchers(HttpMethod.GET, "/users/**").hasRole("ADMIN")
-                        // .requestMatchers(HttpMethod.GET, "/users/**").hasAnyAuthority("ROLE_ADMIN") -
+                        // .requestMatchers(HttpMethod.GET, "/users/**").hasAuthority("ROLE_ADMIN")
                         .anyRequest()
                         .authenticated())
                 .csrf(AbstractHttpConfigurer::disable)
