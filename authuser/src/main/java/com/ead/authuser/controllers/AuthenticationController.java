@@ -4,6 +4,10 @@ import java.util.Objects;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.Errors;
 import org.springframework.validation.annotation.Validated;
@@ -13,11 +17,15 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.ead.authuser.configs.security.JwtProvider;
+import com.ead.authuser.dtos.JwtRecordDto;
+import com.ead.authuser.dtos.LoginRecordDto;
 import com.ead.authuser.dtos.UserRecordDto;
 import com.ead.authuser.services.UserService;
 import com.ead.authuser.validations.UserValidation;
 import com.fasterxml.jackson.annotation.JsonView;
 
+import jakarta.validation.Valid;
 import lombok.extern.log4j.Log4j2;
 
 @Log4j2
@@ -31,10 +39,15 @@ public class AuthenticationController {
 
     private final UserService userService;
     private final UserValidation userValidation;
+    private final AuthenticationManager authenticationManager;
+    private final JwtProvider jwtProvider;
 
-    public AuthenticationController(UserService userService, UserValidation userValidation) {
+    public AuthenticationController(UserService userService, UserValidation userValidation,
+            AuthenticationManager authenticationManager, JwtProvider jwtProvider) {
         this.userService = userService;
         this.userValidation = userValidation;
+        this.authenticationManager = authenticationManager;
+        this.jwtProvider = jwtProvider;
     }
 
     @Transactional
@@ -52,6 +65,17 @@ public class AuthenticationController {
         }
 
         return ResponseEntity.status(HttpStatus.CREATED).body(userService.registerUser(userRecordDto));
+    }
+
+    @PostMapping("/login")
+    public ResponseEntity<JwtRecordDto> authenticateUser(@RequestBody @Valid LoginRecordDto loginRecordDto) {
+        Authentication authentication = authenticationManager.authenticate(
+                new UsernamePasswordAuthenticationToken(loginRecordDto.username(), loginRecordDto.password()));
+
+        SecurityContextHolder.getContext().setAuthentication(authentication);
+
+        return ResponseEntity.status(HttpStatus.CREATED)
+                .body(new JwtRecordDto(jwtProvider.generateJwt(authentication)));
     }
 
     // Exemplos de logger utilizando o Lombok(@Log4j2):
