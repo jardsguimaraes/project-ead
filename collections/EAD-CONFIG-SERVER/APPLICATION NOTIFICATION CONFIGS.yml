@@ -1,0 +1,18 @@
+info:
+  name: APPLICATION NOTIFICATION CONFIGS
+  type: http
+  seq: 1
+
+http:
+  method: GET
+  url: "{{localhost-config-server}}/ead-notification-service/main"
+  auth:
+    type: basic
+    username: configserver
+    password: ead123cs
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5

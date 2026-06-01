@@ -1,0 +1,15 @@
+info:
+  name: DELETE MODULE
+  type: http
+  seq: 1
+
+http:
+  method: DELETE
+  url: "{{localhost-gateway}}/ead-course/courses/518d30ed-9e68-47fb-b1d2-a5b3593a48af/modules/b80d7248-b194-4107-a1c8-45a524bfade0"
+  auth: inherit
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5

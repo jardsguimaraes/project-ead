@@ -1,0 +1,25 @@
+info:
+  name: POST SIGN UP
+  type: http
+  seq: 1
+
+http:
+  method: POST
+  url: "{{localhost-gateway}}/ead-authuser/auth/signup"
+  body:
+    type: json
+    data: |-
+      {
+          "username": "Wilson",
+          "email": "falcao@avenger.com",
+          "password": "F176!=8#3y67", 
+          "fullName": "Sam Wilson",
+          "phoneNumber": "72811643274"
+      }
+  auth: inherit
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5

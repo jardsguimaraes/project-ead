@@ -1,0 +1,15 @@
+info:
+  name: GET ONE LESSON
+  type: http
+  seq: 1
+
+http:
+  method: GET
+  url: "{{localhost-gateway}}/ead-course/modules/97f2545f-01c7-4b4a-8ddd-567669dde88b/lessons/aff487e7-6af9-4f50-bbd5-e798f21766eb"
+  auth: inherit
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5

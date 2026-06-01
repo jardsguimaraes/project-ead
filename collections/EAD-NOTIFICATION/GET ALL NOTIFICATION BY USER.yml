@@ -1,0 +1,15 @@
+info:
+  name: GET ALL NOTIFICATION BY USER
+  type: http
+  seq: 1
+
+http:
+  method: GET
+  url: "{{localhost-gateway}}/ead-notification/users/a57453ba-e692-4b9a-9940-d896b345dd5c/notifications"
+  auth: inherit
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5

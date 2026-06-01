@@ -1,0 +1,15 @@
+info:
+  name: GET ONE MODULE
+  type: http
+  seq: 1
+
+http:
+  method: GET
+  url: "{{localhost-gateway}}/ead-course/courses/c5f4bb72-bcc5-4fd7-8690-8c1d2593c06e/modules/7153d821-9b3e-43be-a446-4ec8d576a102"
+  auth: inherit
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5

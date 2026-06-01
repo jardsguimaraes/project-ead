@@ -1,0 +1,15 @@
+info:
+  name: DELETE LESSON
+  type: http
+  seq: 1
+
+http:
+  method: DELETE
+  url: "{{localhost-gateway}}/ead-course/modules/96c741bb-ba6d-4cff-8bf1-a8ec9ac5f91e/lessons/235bd775-7d52-4d20-9056-8fb359c02c4e"
+  auth: inherit
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5

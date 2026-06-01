@@ -1,0 +1,22 @@
+info:
+  name: PUT MODULE
+  type: http
+  seq: 1
+
+http:
+  method: PUT
+  url: "{{localhost-gateway}}/ead-course/courses/518d30ed-9e68-47fb-b1d2-a5b3593a48af/modules/96c741bb-ba6d-4cff-8bf1-a8ec9ac5f91e"
+  body:
+    type: json
+    data: |-
+      {
+        "title": "Modulo 3",
+        "description": "POO com Spring"
+      }
+  auth: inherit
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5

@@ -1,0 +1,21 @@
+info:
+  name: UPDATE IMAGE
+  type: http
+  seq: 1
+
+http:
+  method: PUT
+  url: "{{localhost-gateway}}/ead-authuser/users/d3d85301-e9e2-4fc4-89d7-d5bd8b6afcd8/image"
+  body:
+    type: json
+    data: |-
+      {
+        "imageUrl": "https://clarkkent/image/741258963/ac"
+      }
+  auth: inherit
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5
