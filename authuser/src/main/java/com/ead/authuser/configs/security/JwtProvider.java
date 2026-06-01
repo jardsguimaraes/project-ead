@@ -2,11 +2,13 @@ package com.ead.authuser.configs.security;
 
 import java.nio.charset.StandardCharsets;
 import java.util.Date;
+import java.util.stream.Collectors;
 
 import javax.crypto.SecretKey;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.stereotype.Component;
 
 import io.jsonwebtoken.ExpiredJwtException;
@@ -28,9 +30,13 @@ public class JwtProvider {
 
     public String generateJwt(Authentication authentication) {
         var userPrincipal = (UserDetailsImpl) authentication.getPrincipal();
+        final String roles = userPrincipal.getAuthorities().stream()
+                .map(GrantedAuthority::getAuthority)
+                .collect(Collectors.joining(","));
 
         return Jwts.builder()
-                .subject((userPrincipal.getUsername()))
+                .subject((userPrincipal.getUserId().toString()))
+                .claim("roles", roles)
                 .issuedAt(new Date())
                 .expiration(new Date((new Date()).getTime() + jwtEspirationMs))
                 .signWith(getSecretKey())
@@ -60,7 +66,7 @@ public class JwtProvider {
         return false;
     }
 
-    public String getUsernameJwt(String token) {
+    public String getSubjectJwt(String token) {
         return Jwts.parser()
                 .verifyWith(getSecretKey())
                 .build()

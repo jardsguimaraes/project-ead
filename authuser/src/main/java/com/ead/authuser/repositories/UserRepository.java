@@ -4,9 +4,9 @@ import java.util.Optional;
 import java.util.UUID;
 
 import org.springframework.data.jpa.repository.EntityGraph;
+import org.springframework.data.jpa.repository.EntityGraph.EntityGraphType;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
-import org.springframework.data.jpa.repository.EntityGraph.EntityGraphType;
 
 import com.ead.authuser.models.UserModel;
 
@@ -18,4 +18,8 @@ public interface UserRepository extends JpaRepository<UserModel, UUID>, JpaSpeci
 
     @EntityGraph(attributePaths = "roles", type = EntityGraphType.FETCH)
     Optional<UserModel> findByUsername(String username);
+
+    @EntityGraph(attributePaths = "roles", type = EntityGraphType.FETCH)
+    Optional<UserModel> findById(UUID userId);
+
 }
