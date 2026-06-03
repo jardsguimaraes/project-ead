@@ -36,7 +36,7 @@ public class UserNotificationController {
         this.authenticationCurrentUserService = authenticationCurrentUserService;
     }
 
-    @PreAuthorize("hasAnyRoles('USER')")
+    @PreAuthorize("hasAnyRole('USER')")
     @GetMapping("/{userId}/notifications")
     public ResponseEntity<Page<NotificationModel>> getAllNotificationByUser(@PathVariable(value = "userId") UUID userId,
             Pageable pageable) {
@@ -51,7 +51,7 @@ public class UserNotificationController {
         }
     }
 
-    @PreAuthorize("hasAnyRoles('USER')")
+    @PreAuthorize("hasAnyRole('USER')")
     @PutMapping("/{userId}/notifications/{notificationId}")
     public ResponseEntity<NotificationModel> updateNotification(@PathVariable(value = "userId") UUID userId,
             @PathVariable(value = "notificationId") UUID notificationId,
