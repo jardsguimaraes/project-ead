@@ -8,6 +8,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -43,6 +44,7 @@ public class CourseUserController {
         this.subscriptionUserInCourseValidation = subscriptionUserInCourseValidation;
     }
 
+    @PreAuthorize("hasAnyRole('INSTRUCTOR')")
     @GetMapping("/{courseId}/users")
     public ResponseEntity<Object> getAllUsersByCourse(
             SpecificationTemplate.UserSpec spec,
@@ -54,6 +56,7 @@ public class CourseUserController {
     }
 
     @Transactional
+    @PreAuthorize("hasAnyRole('USER')")
     @PostMapping("/{courseId}/users/subscription")
     public ResponseEntity<Object> saveSubscriptionUserInCourse(@PathVariable(value = "courseId") UUID courseId,
             @RequestBody @Valid SubscriptionRecordDto subscriptionRecordDto,

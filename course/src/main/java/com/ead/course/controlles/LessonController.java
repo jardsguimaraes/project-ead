@@ -8,6 +8,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -41,6 +42,7 @@ public class LessonController {
     }
 
     @Transactional
+    @PreAuthorize("hasAnyRole('INSTRUCTOR')")
     @PostMapping("/{moduleId}/lessons")
     public ResponseEntity<Object> saveLesson(@PathVariable(value = "moduleId") UUID moduleId,
             @RequestBody @Valid LessonRecordDto lessonRecordDto) {
@@ -50,6 +52,7 @@ public class LessonController {
     }
 
     @SuppressWarnings("null")
+    @PreAuthorize("hasAnyRole('USER')")
     @GetMapping("/{moduleId}/lessons")
     public ResponseEntity<Page<LessonModel>> getAllLessons(@PathVariable(value = "moduleId") UUID moduleId,
             SpecificationTemplate.LessonSpec spec, Pageable pageable) {
@@ -65,6 +68,7 @@ public class LessonController {
         return ResponseEntity.status(HttpStatus.OK).body(lessonPageModel);
     }
 
+    @PreAuthorize("hasAnyRole('USER')")
     @GetMapping("/{moduleId}/lessons/{lessonId}")
     public ResponseEntity<Object> getOneLessons(@PathVariable(value = "moduleId") UUID moduleId,
             @PathVariable(value = "lessonId") UUID lessonId) {
@@ -72,6 +76,7 @@ public class LessonController {
     }
 
     @Transactional
+    @PreAuthorize("hasAnyRole('INSTRUCTOR')")
     @DeleteMapping("/{moduleId}/lessons/{lessonId}")
     public ResponseEntity<Object> deleteLesson(@PathVariable(value = "moduleId") UUID moduleId,
             @PathVariable(value = "lessonId") UUID lessonId) {
@@ -81,6 +86,7 @@ public class LessonController {
     }
 
     @Transactional
+    @PreAuthorize("hasAnyRole('INSTRUCTOR')")
     @PutMapping("/{moduleId}/lessons/{lessonId}")
     public ResponseEntity<Object> updateLesson(@PathVariable(value = "moduleId") UUID moduleId,
             @PathVariable(value = "lessonId") UUID lessonId, @RequestBody @Valid LessonRecordDto lessonRecordDto) {
