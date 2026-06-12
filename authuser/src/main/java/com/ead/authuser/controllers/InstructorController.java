@@ -2,6 +2,7 @@ package com.ead.authuser.controllers;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -25,8 +26,9 @@ public class InstructorController {
     }
 
     @Transactional
+    @PreAuthorize("hasAnyRole('ADMIN')")
     @PostMapping("/subscription")
-    public ResponseEntity<UserModel> putMethodName(@RequestBody @Valid InstructorrecordDto instructorrecordDto) {
+    public ResponseEntity<UserModel> saveSubscriptionInstructor(@RequestBody @Valid InstructorrecordDto instructorrecordDto) {
         return ResponseEntity.status(HttpStatus.OK)
                 .body(userService.registerInstructor(userService.findById(instructorrecordDto.userId())));
     }
