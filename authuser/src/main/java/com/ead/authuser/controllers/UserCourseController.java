@@ -8,8 +8,10 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -32,10 +34,12 @@ public class UserCourseController {
         this.userService = userService;
     }
 
+    @PreAuthorize("hasAnyRole('USER')")
     @GetMapping("/{userId}/courses")
     public ResponseEntity<Page<CourseRecordDto>> getAllCoursesByUser(@PathVariable(value = "userId") UUID userId,
-            @PageableDefault(sort = "courseId", direction = Sort.Direction.ASC) Pageable pageable) {
+            @PageableDefault(sort = "courseId", direction = Sort.Direction.ASC) Pageable pageable,
+            @RequestHeader("Authorization") String token) {
         userService.findById(userId);
-        return ResponseEntity.status(HttpStatus.OK).body(courseClient.getAllCourseByUser(userId, pageable));
+        return ResponseEntity.status(HttpStatus.OK).body(courseClient.getAllCourseByUser(userId, pageable, token));
     }
 }
