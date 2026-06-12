@@ -11,8 +11,7 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
-import org.springframework.web.client.HttpClientErrorException;
-import org.springframework.web.client.HttpServerErrorException;
+import org.springframework.web.client.HttpStatusCodeException;
 import org.springframework.web.client.ResourceAccessException;
 import org.springframework.web.client.RestClient;
 import org.springframework.web.client.RestClientException;
@@ -39,10 +38,12 @@ public class CourseClient {
 
     // Anotação utilizada quando se deseja a abordagem do Retry com Fallback
     // @Retry(name = "retryInstance", fallbackMethod = "retryFallback")
-    // Anotação utilizada quando se deseja a abordagem do CircuitBreaker com Fallback
-    // @CircuitBreaker(name = "circuitbreakerInstance", fallbackMethod = "circuitbreakerFallback")
+    // Anotação utilizada quando se deseja a abordagem do CircuitBreaker com
+    // Fallback
+    // @CircuitBreaker(name = "circuitbreakerInstance", fallbackMethod =
+    // "circuitbreakerFallback")
     @CircuitBreaker(name = "circuitbreakerInstance")
-    public Page<CourseRecordDto> getAllCourseByUser(UUID userId, Pageable pageable) {
+    public Page<CourseRecordDto> getAllCourseByUser(UUID userId, Pageable pageable, String token) {
         var url = baseUrlCourse + "/courses?userId=" + userId +
                 "&page=" + pageable.getPageNumber() +
                 "&size=" + pageable.getPageSize() +
@@ -51,14 +52,16 @@ public class CourseClient {
         try {
             var responsePageDto = restClient.get()
                     .uri(url)
+                    .header("Authorization", token)
                     .retrieve()
                     .body(new ParameterizedTypeReference<ResponsePageDto<CourseRecordDto>>() {
                     });
 
             log.debug("Successful microservice Course response: {}", responsePageDto);
             return responsePageDto;
-        } catch (HttpClientErrorException | HttpServerErrorException e) {
-            log.error("Error Request RestClient with couse: ", e.getMessage());
+        } catch (HttpStatusCodeException e) {
+            log.error("Error Request RestClient with status: {}", e.getStatusCode(), e);
+
             throw new ExternalRestClientException(e.getStatusCode(),
                     "Error Request RestClient with couse: " + e.getResponseBodyAsString(),
                     "Course", e);
@@ -92,5 +95,5 @@ public class CourseClient {
         return new PageImpl<>(searchResult);
     }
 
-    //*****************************************************************************************
+    // *****************************************************************************************
 }
