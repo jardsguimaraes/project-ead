@@ -8,9 +8,9 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -21,7 +21,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.ead.authuser.configs.security.AuthenticationCurrentUserService;
 import com.ead.authuser.configs.security.UserDetailsImpl;
 import com.ead.authuser.dtos.UserRecordDto;
 import com.ead.authuser.models.UserModel;
@@ -37,11 +36,11 @@ import specifications.SpecificationTemplate;
 public class UserController {
 
     private final UserService userService;
-    private final AuthenticationCurrentUserService authenticationCurrentUserService;
+    private final PasswordEncoder passwordEncoder;
 
-    public UserController(UserService userService, AuthenticationCurrentUserService authenticationCurrentUserService) {
+    public UserController(UserService userService, PasswordEncoder passwordEncoder) {
         this.userService = userService;
-        this.authenticationCurrentUserService = authenticationCurrentUserService;
+        this.passwordEncoder = passwordEncoder;
     }
 
     @SuppressWarnings("null")
@@ -63,20 +62,14 @@ public class UserController {
         return ResponseEntity.status(HttpStatus.OK).body(userPageModel);
     }
 
-    @PreAuthorize("hasAnyRole('USER')")
+    @PreAuthorize("@userAuthorization.isCurrentUserOrAdmin(#userId)")
     @GetMapping("/{userId}")
     public ResponseEntity<Object> getOneUser(@PathVariable(value = "userId") UUID userId) {
-        var currentUserId = authenticationCurrentUserService.getCurrentUser().getUserId();
-
-        if (currentUserId.equals(userId)) {
-            return ResponseEntity.status(HttpStatus.OK).body(userService.findById(userId));
-
-        } else {
-            throw new AccessDeniedException("Forbidden");
-        }
+        return ResponseEntity.status(HttpStatus.OK).body(userService.findById(userId));
     }
 
     @Transactional
+    @PreAuthorize("@userAuthorization.isCurrentUserOrAdmin(#userId)")
     @DeleteMapping("/{userId}")
     public ResponseEntity<Object> deleteUser(@PathVariable(value = "userId") UUID userId) {
         log.debug("DELETE deleteUser userId received {}", userId);
@@ -86,6 +79,7 @@ public class UserController {
     }
 
     @Transactional
+    @PreAuthorize("@userAuthorization.isCurrentUserOrAdmin(#userId)")
     @PutMapping("/{userId}")
     public ResponseEntity<Object> updateUser(
             @PathVariable(value = "userId") UUID userId,
@@ -96,6 +90,7 @@ public class UserController {
     }
 
     @Transactional
+    @PreAuthorize("@userAuthorization.isCurrentUserOrAdmin(#userId)")
     @PutMapping("/{userId}/password")
     public ResponseEntity<Object> updatePassword(
             @PathVariable(value = "userId") UUID userId,
@@ -103,7 +98,7 @@ public class UserController {
         log.debug("PUT updatePassword userRecordDto received {}", userRecordDto);
         var userModel = userService.findById(userId);
 
-        if (!userModel.getPassword().equals(userRecordDto.oldPassword())) {
+        if (!passwordEncoder.matches(userRecordDto.oldPassword(), userModel.getPassword())) {
             log.warn("Mismatched old password! userId {} ", userId);
             return ResponseEntity.status(HttpStatus.CONFLICT).body("Error: Mismarched old password!");
         }
@@ -115,6 +110,7 @@ public class UserController {
     }
 
     @Transactional
+    @PreAuthorize("@userAuthorization.isCurrentUserOrAdmin(#userId)")
     @PutMapping("/{userId}/image")
     public ResponseEntity<Object> updateImage(
             @PathVariable(value = "userId") UUID userId,
