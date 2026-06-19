@@ -114,8 +114,22 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public UserModel registerUserAdmin(UserModel userModel) {
+        userModel.setUserType(UserType.ADMIN);
+        userModel.getRoles().add(roleService.findByRoleName(RoleType.ROLE_ADMIN));
+        userModel.setLastUpdateDate(LocalDateTime.now(ZoneId.of("UTC")));
+
+        userRepository.save(userModel);
+        log.debug("Administrator successfully registered {}", userModel.getUserId());
+
+        userEventPublisher.publishUserEvent(userModel.convertToUserEventDto(ActionType.UPDATE));
+
+        return userModel;
+    }
+
+    @Override
     public UserModel updatePassword(UserRecordDto userRecordDto, UserModel userModel) {
-        userModel.setPassword(userRecordDto.password());
+        userModel.setPassword(passwordEncoder.encode(userRecordDto.password()));
         userModel.setLastUpdateDate(LocalDateTime.now(ZoneId.of("UTC")));
 
         log.debug("The password for user {} has been successfully updated.", userModel.getUserId());
@@ -144,6 +158,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public UserModel registerInstructor(UserModel userModel) {
         userModel.setUserType(UserType.INSTRUCTOR);
+        userModel.getRoles().add(roleService.findByRoleName(RoleType.ROLE_INSTRUCTOR));
         userModel.setLastUpdateDate(LocalDateTime.now(ZoneId.of("UTC")));
 
         userRepository.save(userModel);
