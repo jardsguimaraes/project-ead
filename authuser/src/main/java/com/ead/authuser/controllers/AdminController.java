@@ -3,34 +3,34 @@ package com.ead.authuser.controllers;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.ead.authuser.dtos.InstructorRecordDto;
+import com.ead.authuser.dtos.AdminRecordDto;
 import com.ead.authuser.models.UserModel;
 import com.ead.authuser.services.UserService;
 
 import jakarta.validation.Valid;
+import lombok.extern.log4j.Log4j2;
 
+@Log4j2
 @RestController
-@RequestMapping("/instructors")
-public class InstructorController {
+@RequestMapping("/admins")
+public class AdminController {
 
-    final UserService userService;
+    private UserService userService;
 
-    public InstructorController(UserService userService) {
+    public AdminController(UserService userService) {
         this.userService = userService;
     }
 
-    @Transactional
     @PreAuthorize("hasAnyRole('ADMIN')")
-    @PostMapping("/subscription")
-    public ResponseEntity<UserModel> saveSubscriptionInstructor(
-            @RequestBody @Valid InstructorRecordDto instructorrecordDto) {
+    @PutMapping("/subscription")
+    public ResponseEntity<UserModel> registerUserAdmin(@RequestBody @Valid AdminRecordDto adminRecordDto) {
         return ResponseEntity.status(HttpStatus.OK)
-                .body(userService.registerInstructor(userService.findById(instructorrecordDto.userId())));
+                .body(userService.registerUserAdmin(userService.findById(adminRecordDto.userId())));
     }
+
 }

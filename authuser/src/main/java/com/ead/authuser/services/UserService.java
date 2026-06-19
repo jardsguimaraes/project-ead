@@ -34,4 +34,6 @@ public interface UserService {
 
     UserModel registerInstructor(UserModel userModel);
 
+    UserModel registerUserAdmin(UserModel userModel);
+
 }

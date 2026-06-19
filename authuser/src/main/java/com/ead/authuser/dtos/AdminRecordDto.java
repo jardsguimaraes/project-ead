@@ -4,7 +4,6 @@ import java.util.UUID;
 
 import jakarta.validation.constraints.NotNull;
 
-public record InstructorrecordDto(
+public record AdminRecordDto(
         @NotNull(message = "UserId is mandatory!") UUID userId) {
-
 }
