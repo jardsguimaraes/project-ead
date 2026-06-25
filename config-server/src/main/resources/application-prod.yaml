@@ -1,6 +1,7 @@
 server:
     port: ${PORT}
 
+spring:
     cloud:
         config:
             server:
@@ -21,4 +22,5 @@ eureka:
         service-url:
             defaultZone: ${EUREKA_URL}
     instance:
-        hostname: ${APP_DOMAIN_NAME}
+        hostname: ${RAILWAY_PRIVATE_DOMAIN}
+        non-secure-port: ${PORT}
