@@ -20,7 +20,7 @@ ead:
 eureka:
     client:
         service-url:
-            defaultZone: ${EUREKA_URL}
+            defaultZone: http://${EUREKA_USERNAME}:${EUREKA_PASSWORD}@fd-ead-serviceregistry-prod.railway.internal:8080/eureka/
     instance:
         hostname: ${RAILWAY_PRIVATE_DOMAIN}
         non-secure-port: ${PORT}
