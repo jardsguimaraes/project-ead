@@ -9,10 +9,7 @@ eureka:
     client:
         register-with-eureka: false
         fetch-registry: false
-        service-url:
-            defaultZone: ${EUREKA_URL}
     instance:
         hostname: ${APP_DOMAIN_NAME}
-        non-secure-port: 80
 
 
