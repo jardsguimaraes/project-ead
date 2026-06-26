@@ -1,0 +1,25 @@
+server:
+    port: ${PORT}
+
+spring:
+    cloud:
+        config:
+            server:
+                git:
+                    uri: "https://github.com/jardsguimaraes/ead-config-server-repo"
+                    username: ${GIT_USERNAME}
+                    password: ${GIT_TOKEN}
+
+encrypt:
+    key: 9fc5c4835b20b09a901c52b3e8bb2b88cf2cf599a352f5b66214e1b1bc4ae35d
+
+ead:
+    configServer:
+        username: "${CONFIG_SERVER_USERNAME}"
+        password: "${CONFIG_SERVER_PASSWORD}"
+eureka:
+    client:
+        service-url:
+            defaultZone: ${EUREKA_URL}
+    instance:
+        hostname: ${APP_DOMAIN_NAME}
