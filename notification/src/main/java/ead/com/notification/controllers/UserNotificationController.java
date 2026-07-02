@@ -20,8 +20,6 @@ import ead.com.notification.configs.security.AuthenticationCurrentUserService;
 import ead.com.notification.configs.security.UserDetailsImpl;
 import ead.com.notification.dtos.NotificationRecordDto;
 import ead.com.notification.models.NotificationModel;
-import ead.com.notification.security.AuthenticationCurrentUserService;
-import ead.com.notification.security.UserDetailsImpl;
 import ead.com.notification.services.NotificationService;
 import jakarta.validation.Valid;
 
