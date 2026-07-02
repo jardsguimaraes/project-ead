@@ -1,9 +1,4 @@
-server:
-    port: 8080
-
 spring:
-    application:
-        name: ead-api-gateway
     config:
         import: "configserver:"
         #optional: caso queira utilizar uma rota alternativa em caso de falha
