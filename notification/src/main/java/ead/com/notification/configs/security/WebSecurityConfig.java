@@ -17,6 +17,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
+import ead.com.notification.security.AcessDeniedHandlerImpl;
 import jakarta.servlet.DispatcherType;
 
 @Configuration
