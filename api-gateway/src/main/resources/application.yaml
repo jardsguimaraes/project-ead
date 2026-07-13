@@ -1,17 +1,6 @@
-server:
-    port: 8080
-
 spring:
+    profiles:
+        active:
+            - prod
     application:
         name: ead-api-gateway
-    config:
-        import: "configserver:"
-        #optional: caso queira utilizar uma rota alternativa em caso de falha
-        #com o config-server, as configurações devem estar neste yaml
-        # import: "optional:configserver:"
-    cloud:
-        config:
-            discovery:
-                service-id: ead-config-server
-            username: "${CONFIG_SERVER_USERNAME}"
-            password: "${CONFIG_SERVER_PASSWORD}"
