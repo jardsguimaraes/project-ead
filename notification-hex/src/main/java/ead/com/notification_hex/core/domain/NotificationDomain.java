@@ -10,7 +10,7 @@ public class NotificationDomain {
     private UUID notificationId;
     private UUID userId;
     private String title;
-    private String menssage;
+    private String message;
     private LocalDateTime creationDate;
     private NotificationStatus notificationStatus;
 
@@ -38,12 +38,12 @@ public class NotificationDomain {
         this.title = title;
     }
 
-    public String getMenssage() {
-        return menssage;
+    public String getmessage() {
+        return message;
     }
 
-    public void setMenssage(String menssage) {
-        this.menssage = menssage;
+    public void setmessage(String message) {
+        this.message = message;
     }
 
     public LocalDateTime getCreationDate() {
