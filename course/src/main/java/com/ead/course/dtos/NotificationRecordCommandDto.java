@@ -4,7 +4,7 @@ import java.util.UUID;
 
 public record NotificationRecordCommandDto(
     String title,
-    String menssage,
+    String message,
     UUID userId
 ) {
     
