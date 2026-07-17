@@ -39,7 +39,7 @@ public class NotificationModel implements Serializable {
     private String title;
 
     @Column(nullable = false)
-    private String menssage;
+    private String message;
 
     @Column(nullable = false)
     private LocalDateTime creationDate;
