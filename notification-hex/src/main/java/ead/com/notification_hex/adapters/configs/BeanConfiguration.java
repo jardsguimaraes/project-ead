@@ -6,7 +6,7 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 
 import ead.com.notification_hex.NotificationHexApplication;
-import ead.com.notification_hex.core.ports.NotificationServicePort;
+import ead.com.notification_hex.core.ports.NotificationPersistencePort;
 import ead.com.notification_hex.core.services.NotificationServicePortImpl;
 
 @Configuration
@@ -14,7 +14,7 @@ import ead.com.notification_hex.core.services.NotificationServicePortImpl;
 public class BeanConfiguration {
 
     @Bean
-    NotificationServicePortImpl notificationServicePortImpl(NotificationServicePort persistence) {
+    NotificationServicePortImpl notificationServicePortImpl(NotificationPersistencePort persistence) {
         return new NotificationServicePortImpl(persistence);
     }
 

@@ -8,21 +8,22 @@ import java.util.UUID;
 import ead.com.notification_hex.core.domain.NotificationDomain;
 import ead.com.notification_hex.core.domain.PageInfo;
 import ead.com.notification_hex.core.domain.enums.NotificationStatus;
+import ead.com.notification_hex.core.ports.NotificationPersistencePort;
 import ead.com.notification_hex.core.ports.NotificationServicePort;
 
 public class NotificationServicePortImpl implements NotificationServicePort {
 
-    private final NotificationServicePort notificationServicePort;
+    private final NotificationPersistencePort notificationPersistencePort;
 
-    public NotificationServicePortImpl(NotificationServicePort notificationServicePort) {
-        this.notificationServicePort = notificationServicePort;
+    public NotificationServicePortImpl(NotificationPersistencePort notificationPersistencePort) {
+        this.notificationPersistencePort = notificationPersistencePort;
     }
 
     @Override
     public NotificationDomain saveNotification(NotificationDomain notificationDomain) {
         notificationDomain.setCreationDate(LocalDateTime.now(ZoneId.of("UTC")));
         notificationDomain.setNotificationStatus(NotificationStatus.CREATED);
-        return notificationServicePort.saveNotification(notificationDomain);
+        return notificationPersistencePort.saveNotification(notificationDomain);
     }
 
     @Override
