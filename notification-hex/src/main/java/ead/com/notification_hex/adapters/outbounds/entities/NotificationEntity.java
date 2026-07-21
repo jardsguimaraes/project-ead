@@ -1,10 +1,12 @@
-package ead.com.notification.models;
+package ead.com.notification_hex.adapters.outbounds.entities;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
-import ead.com.notification.enums.NotificationStatus;
+import com.fasterxml.jackson.annotation.JsonInclude;
+
+import ead.com.notification_hex.core.domain.enums.NotificationStatus;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -18,15 +20,16 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-@Entity
+@JsonInclude(JsonInclude.Include.NON_NULL)
 @Table(name = "TB_NOTIFICATIONS")
+@Entity
 @Getter
 @Setter
-@NoArgsConstructor
 @AllArgsConstructor
-public class NotificationModel implements Serializable {
+@NoArgsConstructor
+public class NotificationEntity implements Serializable {
 
-    private static final long serialVersionUID = 1L;
+    private static final Long serialVersionUID = 1L;
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
