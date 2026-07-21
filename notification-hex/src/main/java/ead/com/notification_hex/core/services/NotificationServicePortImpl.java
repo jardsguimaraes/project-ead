@@ -28,8 +28,7 @@ public class NotificationServicePortImpl implements NotificationServicePort {
 
     @Override
     public List<NotificationDomain> findAllNotificationByUser(UUID userId, PageInfo pageInfo) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'findAllNotificationByUser'");
+        return notificationPersistencePort.findAllByUserIdAndNotificationStatus(userId, NotificationStatus.CREATED, pageInfo);
     }
 
     @Override

@@ -23,6 +23,9 @@
 		},
 		{
 			"path": "notification"
+		},
+		{
+			"path": "../ead-config-server-repo"
 		}
 	],
 	"settings": {}
