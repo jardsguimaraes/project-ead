@@ -1,5 +1,6 @@
 package ead.com.notification_hex.adapters.outbounds.persistences;
 
+import java.util.Optional;
 import java.util.UUID;
 
 import org.springframework.data.domain.Page;
@@ -13,5 +14,7 @@ public interface NotificationJpaReporsitory extends JpaRepository<NotificationEn
 
     Page<NotificationEntity> findAllByUserIdAndNotificationStatus(UUID userId,
             NotificationStatus notificationStatus, PageRequest pageable);
+
+    Optional<NotificationEntity> findByNotificationIdAndUserId(UUID notificationId, UUID userId);
 
 }

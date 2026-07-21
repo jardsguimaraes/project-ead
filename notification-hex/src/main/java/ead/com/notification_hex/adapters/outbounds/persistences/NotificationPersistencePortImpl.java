@@ -8,6 +8,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Component;
 
+import ead.com.notification_hex.adapters.exeptions.ExternalNotFoundException;
 import ead.com.notification_hex.adapters.outbounds.entities.NotificationEntity;
 import ead.com.notification_hex.core.domain.NotificationDomain;
 import ead.com.notification_hex.core.domain.PageInfo;
@@ -46,14 +47,20 @@ public class NotificationPersistencePortImpl implements NotificationPersistenceP
 
     @Override
     public NotificationDomain findByNotificationIdAndUserId(UUID notificationId, UUID userId) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'findByNotificationIdAndUserId'");
+        var entity = notificationJpaReporitory.findByNotificationIdAndUserId(notificationId, userId)
+                .orElseThrow(() -> new ExternalNotFoundException("Error: Notification fot this user not found."));
+
+        return modelMapper.map(entity, NotificationDomain.class);
     }
 
     @Override
     public NotificationDomain update(NotificationStatus notificationStatus, NotificationDomain notificationDomain) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'update'");
+        notificationDomain.setNotificationStatus(notificationStatus);
+
+        var notificationEntity = notificationJpaReporitory
+                .save(modelMapper.map(notificationDomain, NotificationEntity.class));
+
+        return modelMapper.map(notificationEntity, NotificationDomain.class);
     }
 
 }

@@ -33,15 +33,13 @@ public class NotificationServicePortImpl implements NotificationServicePort {
 
     @Override
     public NotificationDomain findByNotificationIdAndUserId(UUID notificationId, UUID userId) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'findByNotificationIdAndUserId'");
+        return notificationPersistencePort.findByNotificationIdAndUserId(notificationId, userId);
     }
 
     @Override
     public NotificationDomain updateNotification(NotificationStatus notificationStatus,
             NotificationDomain notificationDomain) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'updateNotification'");
+        return notificationPersistencePort.update(notificationStatus, notificationDomain);
     }
 
 }
