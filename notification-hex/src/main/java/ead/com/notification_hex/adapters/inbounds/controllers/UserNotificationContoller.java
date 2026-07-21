@@ -31,16 +31,13 @@ import jakarta.validation.Valid;
 @RequestMapping("/users")
 public class UserNotificationContoller {
 
-    private final NotificationRecordDto notificationRecordDto;
     private final NotificationServicePort notificationServicePort;
     private final AuthenticationCurrentUserService authenticationCurrentUserService;
 
     public UserNotificationContoller(NotificationServicePort notificationServicePort,
-            AuthenticationCurrentUserService authenticationCurrentUserService,
-            NotificationRecordDto notificationRecordDto) {
+            AuthenticationCurrentUserService authenticationCurrentUserService) {
         this.notificationServicePort = notificationServicePort;
         this.authenticationCurrentUserService = authenticationCurrentUserService;
-        this.notificationRecordDto = notificationRecordDto;
     }
 
     @PreAuthorize("hasAnyRole('USER')")

@@ -4,6 +4,6 @@ import ead.com.notification_hex.core.domain.enums.NotificationStatus;
 import jakarta.validation.constraints.NotNull;
 
 public record NotificationRecordDto(
-        @NotNull NotificationStatus notificationStatus) {
+                @NotNull NotificationStatus notificationStatus) {
 
 }
