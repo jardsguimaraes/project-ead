@@ -10,6 +10,7 @@ import org.springframework.stereotype.Component;
 
 import com.ead.payment.dtos.UserEventRecordDto;
 import com.ead.payment.enums.ActionType;
+import com.ead.payment.enums.PaymentStatus;
 import com.ead.payment.services.UserService;
 
 @Component
@@ -21,16 +22,17 @@ public class UserConsumer {
         this.userService = userService;
     }
 
-    @RabbitListener(bindings = @QueueBinding(
-        value = @Queue(value = "${ead.broker.queue.userEventQueue.name}", durable = "true"),
-        exchange = @Exchange(value = "${ead.broker.exchange.userEventExchange}", type = ExchangeTypes.FANOUT, ignoreDeclarationExceptions = "true")
-    ))
+    @RabbitListener(bindings = @QueueBinding(value = @Queue(value = "${ead.broker.queue.userEventQueue.name}", durable = "true"), exchange = @Exchange(value = "${ead.broker.exchange.userEventExchange}", type = ExchangeTypes.FANOUT, ignoreDeclarationExceptions = "true")))
     public void ListenUserEvent(@Payload UserEventRecordDto userEventRecordDto) {
         var userModel = userEventRecordDto.convertToUserModel();
 
         switch (ActionType.valueOf(userEventRecordDto.actionType())) {
-                case CREATE, UPDATE -> userService.save(userModel);
-                case DELETE -> userService.delete(userEventRecordDto.userId());
+            case CREATE -> {
+                userModel.setPaymentStatus(PaymentStatus.NOTSTARTED);
+                userService.save(userModel);
+            }
+            case UPDATE -> userService.save(userModel);
+            case DELETE -> userService.delete(userEventRecordDto.userId());
         }
     }
 }
