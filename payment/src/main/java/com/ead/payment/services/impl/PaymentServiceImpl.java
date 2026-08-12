@@ -2,6 +2,7 @@ package com.ead.payment.services.impl;
 
 import java.time.LocalDateTime;
 import java.time.ZoneId;
+import java.util.Optional;
 
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
@@ -41,18 +42,24 @@ public class PaymentServiceImpl implements PaymentService {
         creditCardRepository.save(creditCardModel);
 
         var paymentModel = new PaymentModel();
-        
+
         paymentModel.setPaymentControl(PaymentControl.REQUESTED);
         paymentModel.setPaymentRequestDate(LocalDateTime.now(ZoneId.of("UTC")));
         paymentModel.setPaymentExpirationDate(LocalDateTime.now(ZoneId.of("UTC")).plusMonths(12));
-        paymentModel.setLastDigitsCreditCard(paymentRequestRecordDto.creditCardNumber().substring(paymentRequestRecordDto.creditCardNumber().length() - 4));
+        paymentModel.setLastDigitsCreditCard(paymentRequestRecordDto.creditCardNumber()
+                .substring(paymentRequestRecordDto.creditCardNumber().length() - 4));
         paymentModel.setValuePaid(paymentRequestRecordDto.valuePaid());
         paymentModel.setUser(userModel);
 
         paymentRepository.save(paymentModel);
 
-        //send request to queue
+        // send request to queue
 
         return paymentModel;
+    }
+
+    @Override
+    public Optional<PaymentModel> findLastPaymentByUser(UserModel userModel) {
+        return paymentRepository.findTopByUserOrderByPaymentRequestDateDesc(userModel);
     }
 }

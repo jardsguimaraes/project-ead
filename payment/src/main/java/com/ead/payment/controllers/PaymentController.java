@@ -1,5 +1,6 @@
 package com.ead.payment.controllers;
 
+import java.util.Optional;
 import java.util.UUID;
 
 import org.springframework.http.HttpStatus;
@@ -13,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.ead.payment.dtos.PaymentRequestRecordDto;
+import com.ead.payment.enums.PaymentControl;
 import com.ead.payment.models.PaymentModel;
 import com.ead.payment.services.PaymentService;
 import com.ead.payment.services.UserService;
@@ -34,10 +36,21 @@ public class PaymentController {
     @PreAuthorize("hasAnyRole('USER')")
     @PostMapping("/{userId}/payments")
     @Transactional
-    public ResponseEntity<PaymentModel> requestPayment(@PathVariable(value = "userId") UUID userId,
+    public ResponseEntity<Object> requestPayment(@PathVariable(value = "userId") UUID userId,
             @RequestBody @Valid PaymentRequestRecordDto paymentRequestRecordDto) {
         var userModel = userService.findById(userId);
-        // inserir validações
+
+        Optional<PaymentModel> paymentModelOptinal = paymentService.findLastPaymentByUser(userModel);
+
+        if (paymentModelOptinal.isPresent()) {
+            if (paymentModelOptinal.get().getPaymentControl().equals(PaymentControl.REQUESTED)) {
+                return ResponseEntity.status(HttpStatus.CONFLICT).body("Payment already request.");
+            }
+
+            if (paymentModelOptinal.get().getPaymentControl().equals(PaymentControl.EFFECTED)) {
+                return ResponseEntity.status(HttpStatus.CONFLICT).body("Payment already made");
+            }
+        }
 
         return ResponseEntity.status(HttpStatus.ACCEPTED)
                 .body(paymentService.requestPayment(paymentRequestRecordDto, userModel));
