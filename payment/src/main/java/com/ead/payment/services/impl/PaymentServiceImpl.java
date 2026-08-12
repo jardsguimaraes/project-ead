@@ -3,12 +3,17 @@ package com.ead.payment.services.impl;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.Optional;
+import java.util.UUID;
 
 import org.springframework.beans.BeanUtils;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import com.ead.payment.dtos.PaymentRequestRecordDto;
 import com.ead.payment.enums.PaymentControl;
+import com.ead.payment.exeptions.ExternalNotFoundException;
 import com.ead.payment.models.CreditCardModel;
 import com.ead.payment.models.PaymentModel;
 import com.ead.payment.models.UserModel;
@@ -61,5 +66,16 @@ public class PaymentServiceImpl implements PaymentService {
     @Override
     public Optional<PaymentModel> findLastPaymentByUser(UserModel userModel) {
         return paymentRepository.findTopByUserOrderByPaymentRequestDateDesc(userModel);
+    }
+
+    @Override
+    public Page<PaymentModel> findAllByUser(Specification<PaymentModel> spec, Pageable pageable) {
+        return paymentRepository.findAll(spec, pageable);
+    }
+
+    @Override
+    public PaymentModel findPaymentByUser(UUID userId, UUID paymentId) {
+        return paymentRepository.findPaymentByUser(userId, paymentId)
+                .orElseThrow(() -> new ExternalNotFoundException("ERROR: Payment not found for this user"));
     }
 }
