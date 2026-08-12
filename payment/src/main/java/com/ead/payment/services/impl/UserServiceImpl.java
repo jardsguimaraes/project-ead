@@ -4,6 +4,7 @@ import java.util.UUID;
 
 import org.springframework.stereotype.Service;
 
+import com.ead.payment.exeptions.ExternalNotFoundException;
 import com.ead.payment.models.UserModel;
 import com.ead.payment.repositories.UserRepository;
 import com.ead.payment.services.UserService;
@@ -26,5 +27,11 @@ public class UserServiceImpl implements UserService {
     public void delete(UUID userId) {
         userRepository.deleteById(userId);
     }
-    
+
+    @Override
+    public UserModel findById(UUID userId) {
+        return userRepository.findById(userId)
+                .orElseThrow(() -> new ExternalNotFoundException("Error User not found!"));
+    }
+
 }

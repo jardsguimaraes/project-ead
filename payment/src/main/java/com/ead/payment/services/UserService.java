@@ -9,4 +9,6 @@ public interface UserService {
     UserModel save(UserModel userModel);
 
     void delete(UUID userId);
+
+    UserModel findById(UUID userId);
 }
