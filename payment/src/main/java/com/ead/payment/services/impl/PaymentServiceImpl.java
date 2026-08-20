@@ -5,18 +5,22 @@ import java.time.ZoneId;
 import java.util.Optional;
 import java.util.UUID;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
+import com.ead.payment.dtos.PaymentCommandRecordDto;
 import com.ead.payment.dtos.PaymentRequestRecordDto;
 import com.ead.payment.enums.PaymentControl;
 import com.ead.payment.exeptions.ExternalNotFoundException;
 import com.ead.payment.models.CreditCardModel;
 import com.ead.payment.models.PaymentModel;
 import com.ead.payment.models.UserModel;
+import com.ead.payment.publishers.PaymentCommadPublisher;
 import com.ead.payment.repositories.CreditCardRepository;
 import com.ead.payment.repositories.PaymentRepository;
 import com.ead.payment.repositories.UserRepository;
@@ -25,15 +29,19 @@ import com.ead.payment.services.PaymentService;
 @Service
 public class PaymentServiceImpl implements PaymentService {
 
+    private static final Logger logger = LoggerFactory.getLogger(PaymentServiceImpl.class);
+
     private final PaymentRepository paymentRepository;
     private final UserRepository userRepository;
     private final CreditCardRepository creditCardRepository;
+    private final PaymentCommadPublisher paymentCommadPublisher;
 
     public PaymentServiceImpl(PaymentRepository paymentRepository, CreditCardRepository creditCardRepository,
-            UserRepository userRepository) {
+            UserRepository userRepository, PaymentCommadPublisher paymentCommadPublisher) {
         this.paymentRepository = paymentRepository;
         this.userRepository = userRepository;
         this.creditCardRepository = creditCardRepository;
+        this.paymentCommadPublisher = paymentCommadPublisher;
     }
 
     @Override
@@ -58,7 +66,14 @@ public class PaymentServiceImpl implements PaymentService {
 
         paymentRepository.save(paymentModel);
 
-        // send request to queue
+        try {
+            var paymentCommandRecordDto = new PaymentCommandRecordDto(userModel.getUserId(),
+                    paymentModel.getPaymentId(),
+                    creditCardModel.getCardId());
+            paymentCommadPublisher.publishPaymentCommand(paymentCommandRecordDto);
+        } catch (Exception e) {
+            logger.error("Error: sending payment command message with cause {}", e.getMessage());
+        }
 
         return paymentModel;
     }
