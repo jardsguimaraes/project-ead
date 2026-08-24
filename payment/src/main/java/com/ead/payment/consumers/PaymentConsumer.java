@@ -22,9 +22,6 @@ public class PaymentConsumer {
 
     @RabbitListener(bindings = @QueueBinding(value = @Queue(value = "${ead.broker.queue.paymentCommandQueue.name}", durable = "true"), exchange = @Exchange(value = "${ead.broker.exchange.paymentCommadExchange}", type = ExchangeTypes.TOPIC, ignoreDeclarationExceptions = "true"), key = "${ead.broker.key.paymentCommadKey}"))
     public void listenPaymentCommand(@Payload PaymentCommandRecordDto paymentCommandRecordDto) {
-        System.out.println(paymentCommandRecordDto.paymentId());
-        System.out.println(paymentCommandRecordDto.userId());
-
-        // make payment
+        paymentService.makePayment(paymentCommandRecordDto);
     }
 }
