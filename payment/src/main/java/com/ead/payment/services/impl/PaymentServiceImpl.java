@@ -25,6 +25,7 @@ import com.ead.payment.repositories.CreditCardRepository;
 import com.ead.payment.repositories.PaymentRepository;
 import com.ead.payment.repositories.UserRepository;
 import com.ead.payment.services.PaymentService;
+import com.ead.payment.services.PaymentStripeService;
 
 @Service
 public class PaymentServiceImpl implements PaymentService {
@@ -35,13 +36,16 @@ public class PaymentServiceImpl implements PaymentService {
     private final UserRepository userRepository;
     private final CreditCardRepository creditCardRepository;
     private final PaymentCommadPublisher paymentCommadPublisher;
+    private final PaymentStripeService paymentStripeService;
 
     public PaymentServiceImpl(PaymentRepository paymentRepository, CreditCardRepository creditCardRepository,
-            UserRepository userRepository, PaymentCommadPublisher paymentCommadPublisher) {
+            UserRepository userRepository, PaymentCommadPublisher paymentCommadPublisher,
+            PaymentStripeService paymentStripeService) {
         this.paymentRepository = paymentRepository;
         this.userRepository = userRepository;
         this.creditCardRepository = creditCardRepository;
         this.paymentCommadPublisher = paymentCommadPublisher;
+        this.paymentStripeService = paymentStripeService;
     }
 
     @Override
@@ -92,5 +96,17 @@ public class PaymentServiceImpl implements PaymentService {
     public PaymentModel findPaymentByUser(UUID userId, UUID paymentId) {
         return paymentRepository.findPaymentByUser(userId, paymentId)
                 .orElseThrow(() -> new ExternalNotFoundException("ERROR: Payment not found for this user"));
+    }
+
+    @Override
+    public void makePayment(PaymentCommandRecordDto paymentCommandRecordDto) {
+        var paymentModel = paymentRepository.findById(paymentCommandRecordDto.paymentId())
+                .orElseThrow(() -> new ExternalNotFoundException("Error: Paymeny not found!"));
+        var userModel = userRepository.findById(paymentCommandRecordDto.userId())
+                .orElseThrow(() -> new ExternalNotFoundException("Error: User not found for Payment"));
+        var creditCardModel = creditCardRepository.findById(paymentCommandRecordDto.cardId())
+                .orElseThrow(() -> new ExternalNotFoundException("Error: creditCard not found"));
+
+        paymentModel = paymentStripeService.processStripePayment(paymentModel, creditCardModel);
     }
 }
