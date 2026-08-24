@@ -17,6 +17,9 @@ ead:
     serviceRegistry:
         username: "${SERVICE_REGISTRY_USERNAME}"
         password: "${SERVICE_REGISTRY_PASSWORD}"
+
+encrypt:
+    key: dIqOQun3edVkNcWp41BxcFRDq0lLLYf22+af/BfNPm4=
 eureka:
     client:
         service-url:
