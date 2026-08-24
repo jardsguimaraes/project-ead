@@ -35,10 +35,12 @@ public class PaymentStripeServiceImpl implements PaymentStripeService {
             paymentIntentId = paymentIntent.getId();
             paymentIntentStatus = paymentIntent.getStatus();
 
-            var intentConfirmParams = PaymentIntentConfirmParams.builder().build();
-            var confirmPaymentIntent = paymentIntent.confirm(intentConfirmParams);
+            var intentConfirmParams = PaymentIntentConfirmParams.builder()
+                    .setReturnUrl("https://example.com/return")
+                    .build();
+            var confirmPaymentIntent = client.v1().paymentIntents().confirm(paymentIntentId, intentConfirmParams);
         } catch (Exception e) {
-            // TODO: handle exception
+            System.out.println(e.getMessage());
         }
 
         return paymentModel;
