@@ -16,6 +16,7 @@ import org.springframework.stereotype.Service;
 import com.ead.payment.dtos.PaymentCommandRecordDto;
 import com.ead.payment.dtos.PaymentRequestRecordDto;
 import com.ead.payment.enums.PaymentControl;
+import com.ead.payment.enums.PaymentStatus;
 import com.ead.payment.exeptions.ExternalNotFoundException;
 import com.ead.payment.models.CreditCardModel;
 import com.ead.payment.models.PaymentModel;
@@ -108,5 +109,22 @@ public class PaymentServiceImpl implements PaymentService {
                 .orElseThrow(() -> new ExternalNotFoundException("Error: creditCard not found"));
 
         paymentModel = paymentStripeService.processStripePayment(paymentModel, creditCardModel);
+        paymentRepository.save(paymentModel);
+
+        if (PaymentControl.EFFECTED.equals(paymentModel.getPaymentControl())) {
+            userModel.setPaymentStatus(PaymentStatus.PAYING);
+            userModel.setLastPaymentDate(LocalDateTime.now(ZoneId.of("UTC")));
+            userModel.setPaymentExpirationDate(LocalDateTime.now(ZoneId.of("UTC")).plusMonths(12));
+
+            if (userModel.getFirstPaymentDate() == null) {
+                userModel.setFirstPaymentDate(LocalDateTime.now(ZoneId.of("UTC")));
+            }
+        } else {
+            userModel.setPaymentStatus(PaymentStatus.DEBTOR);
+        }
+
+        userRepository.save(userModel);
+
+        // send payment event
     }
 }
