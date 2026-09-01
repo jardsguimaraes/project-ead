@@ -13,7 +13,6 @@ import com.ead.payment.models.PaymentModel;
 import com.ead.payment.services.PaymentStripeService;
 import com.stripe.StripeClient;
 import com.stripe.exception.CardException;
-import com.stripe.model.PaymentIntent;
 import com.stripe.param.PaymentIntentConfirmParams;
 import com.stripe.param.PaymentIntentCreateParams;
 
@@ -30,10 +29,9 @@ public class PaymentStripeServiceImpl implements PaymentStripeService {
     public PaymentModel processStripePayment(PaymentModel paymentModel, CreditCardModel creditCardModel) {
         String paymentIntentId = null;
         String paymentIntentStatus = null;
+        StripeClient client = new StripeClient(secretKeyStripe);
 
         try {
-            StripeClient client = new StripeClient(secretKeyStripe);
-
             var params = PaymentIntentCreateParams.builder()
                     .setAmount(paymentModel.getValuePaid().multiply(new BigDecimal("100")).longValue())
                     .setCurrency("brl")
@@ -54,7 +52,7 @@ public class PaymentStripeServiceImpl implements PaymentStripeService {
                 paymentModel.setPaymentMessage("payment effected - paymentIntent: " + paymentIntentId);
                 paymentModel.setPaymentCompletionDate(LocalDateTime.now(ZoneId.of("UTC")));
 
-                log.info("payment effected with success: " + paymentIntentStatus);
+                log.info("payment effected with success: " + paymentIntentId);
             } else {
                 paymentModel.setPaymentControl(PaymentControl.ERROR);
                 paymentModel.setPaymentMessage("payment error v1 - paymentIntente: " + paymentIntentId);
@@ -64,10 +62,10 @@ public class PaymentStripeServiceImpl implements PaymentStripeService {
 
             try {
                 paymentModel.setPaymentControl(PaymentControl.REFUSED);
-                var paymentIntent = PaymentIntent.retrieve(paymentIntentId);
+                var paymentIntent = client.v1().paymentIntents().retrieve(paymentIntentId);
                 var paymentMessageError = """
-                        payment refused v1 - paymentIntent: %s, cause: %s, message: %s
-                        """.formatted(paymentIntentId, paymentIntent.getLastPaymentError().getCode(),
+                        payment refused v1 - paymentIntent: %s, cause: %s, message: %s""".formatted(
+                        paymentIntentId, paymentIntent.getLastPaymentError().getCode(),
                         paymentIntent.getLastPaymentError().getMessage());
                 paymentModel.setPaymentMessage(paymentMessageError);
             } catch (Exception e) {
